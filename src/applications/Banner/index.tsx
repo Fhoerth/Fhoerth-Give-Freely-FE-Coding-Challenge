@@ -1,3 +1,5 @@
+import { CountButton } from '~features/CountButton';
+
 export const Banner: React.FC = () => {
   return (
     <div
@@ -10,6 +12,7 @@ export const Banner: React.FC = () => {
         alignItems: 'center',
       }}>
       Random participant message
+      <CountButton />
     </div>
   );
 };
