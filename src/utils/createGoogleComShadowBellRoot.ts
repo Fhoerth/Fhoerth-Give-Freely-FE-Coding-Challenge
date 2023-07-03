@@ -12,7 +12,7 @@ function findFormContainer(): HTMLDivElement {
   return nextSibling as HTMLDivElement;
 }
 
-export function createGoogleComShadowRootForBell(): ShadowRoot {
+export function createGoogleComShadowBellRoot(): ShadowRoot {
   const maxZIndexForContent = Math.pow(2, 31) - 2;
   const container = findFormContainer();
 
