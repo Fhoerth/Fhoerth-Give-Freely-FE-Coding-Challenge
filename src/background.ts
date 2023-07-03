@@ -1,3 +1,12 @@
+import { BackgroundCommunicationChannel } from '~communication-channel';
+
 export {};
 
-console.log('From background', process.env.PLASMO_PUBLIC_PARTICIPANTS_API_URL);
+async function main() {
+  const channel = new BackgroundCommunicationChannel();
+  channel.initialize();
+}
+
+void main().catch((error) => {
+  console.error(error);
+});

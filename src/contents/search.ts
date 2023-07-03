@@ -1,5 +1,12 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
+import {
+  Channel,
+  Client,
+  ContentCommunicationChannel,
+  MessageType,
+} from '~communication-channel';
+import type { ParticipantsChangeMessage } from '~communication-channel';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
 
 export const config: PlasmoCSConfig = {
@@ -7,6 +14,17 @@ export const config: PlasmoCSConfig = {
 };
 
 async function domContentLoaded(): Promise<void> {
+  const channel = new ContentCommunicationChannel(Client.SEARCH, [
+    Client.SEARCH,
+    Client.BELL,
+  ]);
+
+  await channel.initialize();
+
+  channel.broadcast<ParticipantsChangeMessage>(Channel.PARTICIPANTS_CHANGE, {
+    changed: true,
+  });
+
   console.log('DOM Content Loaded - search');
 }
 

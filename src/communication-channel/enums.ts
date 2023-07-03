@@ -1,0 +1,20 @@
+export enum Client {
+  BELL,
+  SEARCH,
+  POPUP,
+  BACKGROUND,
+}
+
+export enum MessageType {
+  PING,
+  PONG,
+  BROADCAST_REQUEST,
+  BROADCAST_RESPONSE,
+  FETCH_PARTICIPANTS_REQUEST,
+  FETCH_PARTICIPANTS_RESPONSE,
+  BROADCAST_MESSAGE,
+}
+
+export enum Channel {
+  PARTICIPANTS_CHANGE,
+}
