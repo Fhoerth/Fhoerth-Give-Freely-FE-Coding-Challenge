@@ -17,7 +17,6 @@ function bannerMatches(): boolean {
 }
 
 function injectBanner() {
-  alert('Matched');
   renderBanner();
 }
 
