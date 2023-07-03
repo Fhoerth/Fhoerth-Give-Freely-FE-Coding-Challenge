@@ -1,7 +1,12 @@
 import { browser } from '~browser';
 
 import { Client, MessageType } from '../enums';
-import type { PingRequest, PingResponse } from '../types';
+import type {
+  FetchParticipantsRequest,
+  FetchParticipantsResponse,
+  PingRequest,
+  PingResponse,
+} from '../types';
 
 export class CommunicationChannel {
   #client: Client;
@@ -40,5 +45,14 @@ export class CommunicationChannel {
     }
 
     return response;
+  }
+
+  async fetchParticipants(): Promise<FetchParticipantsResponse> {
+    return this.sendToBackground<
+      FetchParticipantsRequest,
+      FetchParticipantsResponse
+    >({
+      type: MessageType.FETCH_PARTICIPANTS_REQUEST,
+    });
   }
 }

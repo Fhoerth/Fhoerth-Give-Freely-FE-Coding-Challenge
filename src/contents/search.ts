@@ -25,6 +25,11 @@ async function domContentLoaded(): Promise<void> {
     changed: true,
   });
 
+  const fetchParticipantsResponse = await channel.fetchParticipants();
+  const websites = fetchParticipantsResponse.payload;
+
+  console.log('Response from Search', websites);
+
   console.log('DOM Content Loaded - search');
 }
 

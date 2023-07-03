@@ -1,7 +1,7 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
-import { API } from '~API';
 import { renderBanner } from '~applications';
+import { Client, ContentCommunicationChannel } from '~communication-channel';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
 
 export const config: PlasmoCSConfig = {
@@ -22,9 +22,14 @@ function injectBanner() {
 
 async function domContentLoaded(): Promise<void> {
   try {
-    const response = await API.fetchParticipants();
+    const channel = new ContentCommunicationChannel(Client.BELL);
 
-    console.log(response);
+    await channel.initialize();
+
+    const fetchParticipantsResponse = await channel.fetchParticipants();
+    const websites = fetchParticipantsResponse.payload;
+
+    console.log('Response from Banner', websites);
 
     if (bannerMatches()) {
       injectBanner();

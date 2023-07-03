@@ -28,6 +28,11 @@ async function domContentLoaded(): Promise<void> {
     },
   );
 
+  const fetchParticipantsResponse = await channel.fetchParticipants();
+  const websites = fetchParticipantsResponse.payload;
+
+  console.log('Response from Bell', websites);
+
   renderBell();
 
   console.log('DOM Content Loaded - bell');
