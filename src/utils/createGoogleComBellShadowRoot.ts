@@ -1,18 +1,32 @@
 import { assert } from '~utils/assert';
 
-function findFormContainer(): HTMLDivElement {
+function findFormContainer(): HTMLFormElement {
   const form = document.querySelector('form');
 
   assert(form, 'Unable to locate google form html element');
 
-  const { nextSibling } = form;
-
-  assert(nextSibling, 'Unable to locate google icon bar');
-
-  return nextSibling as HTMLDivElement;
+  return form;
 }
 
-export function createGoogleComShadowBellRoot(): ShadowRoot {
+export function createGoogleComBellShadowRoot(): ShadowRoot {
+  // const maxZIndexForContent = Math.pow(2, 31) - 2;
+
+  const form = findFormContainer();
+  const iconBar = form.nextElementSibling;
+
+  const root = document.createElement('giveFreely-participant-banner');
+  root.style.position = 'relative';
+
+  const shadowRoot = root.attachShadow({
+    mode: 'open',
+  });
+
+  iconBar?.prepend(root);
+
+  return shadowRoot;
+}
+
+export function createGoogleComBellShadowRoot2(): ShadowRoot {
   const maxZIndexForContent = Math.pow(2, 31) - 2;
   const container = findFormContainer();
 

@@ -1,14 +1,15 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
 import { API } from '~API';
+import { renderBanner } from '~applications';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
 
 export const config: PlasmoCSConfig = {
   matches: ['<all_urls>'],
 };
 
-function bannerMatcher(): boolean {
-  const exampleDomain = 'http://example.org';
+function bannerMatches(): boolean {
+  const exampleDomain = 'http://www.example.org';
   const url = new URL(exampleDomain);
   const regexp = new RegExp(url.origin || '', 'gi');
 
@@ -16,7 +17,8 @@ function bannerMatcher(): boolean {
 }
 
 function injectBanner() {
-  alert('Matches');
+  alert('Matched');
+  renderBanner();
 }
 
 async function domContentLoaded(): Promise<void> {
@@ -25,12 +27,12 @@ async function domContentLoaded(): Promise<void> {
 
     console.log(response);
 
-    if (bannerMatcher()) {
+    if (bannerMatches()) {
       injectBanner();
     }
 
     window.addEventListener('locationchange', () => {
-      if (bannerMatcher()) {
+      if (bannerMatches()) {
         injectBanner();
       }
     });

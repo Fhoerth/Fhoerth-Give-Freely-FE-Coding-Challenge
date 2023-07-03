@@ -9,18 +9,11 @@ function findBody(): HTMLBodyElement {
 }
 
 export function createBannerShadowRoot(): ShadowRoot {
-  const maxZIndexForContent = Math.pow(2, 31) - 2;
-  const body = findBody();
-
-  const container = document.createElement('div');
-
-  container.style.position = 'relative';
-  container.style.zIndex = String(maxZIndexForContent);
-  container.setAttribute('data-testid', 'giveFreely-participant-banner');
-
-  body.appendChild(container);
-
-  const shadowRoot = container.attachShadow({ mode: 'open' });
+  const root = document.createElement('giveFreely-participant-banner');
+  const shadowRoot = root.attachShadow({
+    mode: 'open',
+  });
+  document.documentElement.prepend(root);
 
   return shadowRoot;
 }
