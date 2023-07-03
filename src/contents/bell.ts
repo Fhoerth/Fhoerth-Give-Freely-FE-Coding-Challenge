@@ -1,5 +1,6 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
+import { renderBell } from '~applications';
 import {
   Channel,
   Client,
@@ -26,6 +27,8 @@ async function domContentLoaded(): Promise<void> {
       console.log('Received participants change message', payload.changed);
     },
   );
+
+  renderBell();
 
   console.log('DOM Content Loaded - bell');
 }
