@@ -1,9 +1,11 @@
+export type Participant = {
+  name: string;
+  url: string;
+  messages: string[];
+};
+
 export type ParticipantsResponse = {
   record: {
-    websites: Array<{
-      name: string;
-      url: string;
-      messages: string[];
-    }>;
+    websites: Participant[];
   };
 };

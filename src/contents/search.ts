@@ -6,8 +6,8 @@ import {
   ContentCommunicationChannel,
   MessageType,
 } from '~communication-channel';
-import type { ParticipantsChangeMessage } from '~communication-channel';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
+import { getParticipantElementsToBeHighlighted } from '~utils/getParticipantElementsToBeHighlighted';
 
 export const config: PlasmoCSConfig = {
   matches: ['https://*.google.com/search*', 'https://*.google.com.ar/search*'],
@@ -21,16 +21,21 @@ async function domContentLoaded(): Promise<void> {
 
   await channel.initialize();
 
-  channel.broadcast<ParticipantsChangeMessage>(Channel.PARTICIPANTS_CHANGE, {
-    changed: true,
-  });
-
   const fetchParticipantsResponse = await channel.fetchParticipants();
-  const websites = fetchParticipantsResponse.payload;
 
-  console.log('Response from Search', websites);
+  if (!fetchParticipantsResponse.success) {
+    throw new Error(fetchParticipantsResponse.message);
+  }
 
-  console.log('DOM Content Loaded - search');
+  const participants = fetchParticipantsResponse.payload;
+
+  const applyStyles = (element: Element): void => {
+    if (element instanceof HTMLElement) {
+      element.style.border = '1px solid red';
+    }
+  };
+
+  getParticipantElementsToBeHighlighted(participants).forEach(applyStyles);
 }
 
 function main(): void {
