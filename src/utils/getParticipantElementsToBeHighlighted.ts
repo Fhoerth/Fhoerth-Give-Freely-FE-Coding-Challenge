@@ -1,19 +1,9 @@
 import type { Participant } from '~API/types';
 
-function createRegExp(participants: Participant[]): RegExp {
-  const domains = participants.map((participant) =>
-    participant.url.toLowerCase().replace(/^www\./, ''),
-  );
-  const patterns = domains.map(
-    (domain) => `(^https?://[a-zA-Z0-9-_]*\.?${domain}.*)`,
-  );
-  const regExp = new RegExp(patterns.join('|'), 'i');
-
-  return regExp;
-}
+import { createParticipantsRegExp } from './createParticipantsRegExp';
 
 function createMatcher(participants: Participant[]) {
-  const regExp = createRegExp(participants);
+  const regExp = createParticipantsRegExp(participants);
   const predicate = (anchorElement: HTMLAnchorElement): boolean =>
     !!regExp.exec(anchorElement.href);
 
