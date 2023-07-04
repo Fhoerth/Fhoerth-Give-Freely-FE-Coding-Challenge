@@ -17,6 +17,7 @@ async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel(Client.SEARCH, [
     Client.SEARCH,
     Client.BELL,
+    Client.MODAL,
   ]);
 
   await channel.initialize();

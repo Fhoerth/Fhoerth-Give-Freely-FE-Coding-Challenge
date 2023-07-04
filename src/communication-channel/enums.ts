@@ -1,6 +1,7 @@
 export enum Client {
   BELL,
   SEARCH,
+  MODAL,
   POPUP,
   BACKGROUND,
 }
