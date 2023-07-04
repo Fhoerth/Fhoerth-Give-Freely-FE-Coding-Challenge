@@ -27,7 +27,7 @@ async function domContentLoaded(): Promise<void> {
 
   console.log('Response from Modal', websites);
 
-  renderModal();
+  renderModal(channel);
 
   console.log('DOM Content Loaded - bell');
 }

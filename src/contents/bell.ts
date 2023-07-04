@@ -34,7 +34,7 @@ async function domContentLoaded(): Promise<void> {
 
   console.log('Response from Bell', websites);
 
-  renderBell();
+  renderBell(channel);
 
   console.log('DOM Content Loaded - bell');
 }
