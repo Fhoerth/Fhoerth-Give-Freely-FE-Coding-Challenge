@@ -1,18 +1,17 @@
+import type { Participant } from '~API/types';
 import { CountButton } from '~features/CountButton';
+import { getRandomMessage } from '~utils/getRandomMessage';
 
-export const Banner: React.FC = () => {
+interface BannerProps {
+  participant: Participant;
+}
+
+export const Banner: React.FC<BannerProps> = ({ participant }) => {
+  const message = getRandomMessage(participant);
+
   return (
-    <div
-      style={{
-        background: 'red',
-        color: '#fff',
-        width: '100%',
-        height: '100px',
-        display: 'flex',
-        alignItems: 'center',
-      }}>
-      Random participant message
-      <CountButton />
+    <div className="bg-green-100 border-green-300 text-center border-solid border-x border-y px-8 py-8 text-2xl">
+      {message}
     </div>
   );
 };
