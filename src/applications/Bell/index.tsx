@@ -1,11 +1,24 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useCommunicationChannel } from '~applications/Context';
 import { Channel } from '~communication-channel';
-import type { OpenModalMessage } from '~communication-channel';
+import type {
+  OpenModalMessage,
+  ParticipantsChangeMessage,
+} from '~communication-channel';
 
 export const Bell: React.FC = () => {
+  const [showIcon, setShowIcon] = useState<boolean>(false);
   const channel = useCommunicationChannel();
+
+  useEffect(() => {
+    channel.subscribeToChannel<ParticipantsChangeMessage>(
+      Channel.PARTICIPANTS_CHANGE,
+      ({ participants }) => {
+        setShowIcon(!!participants.length);
+      },
+    );
+  }, [channel]);
 
   const handleIconClick = useCallback((): void => {
     async function emitEvent() {
@@ -20,6 +33,10 @@ export const Bell: React.FC = () => {
 
     void emitEvent();
   }, []);
+
+  if (!showIcon) {
+    return null;
+  }
 
   return (
     <div

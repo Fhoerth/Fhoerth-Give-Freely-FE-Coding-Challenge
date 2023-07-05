@@ -9,11 +9,13 @@ import type {
 } from '../types';
 import { CommunicationChannel } from './CommunicationChannel';
 
-type SubscriptionCallback = (payload: Record<string, unknown>) => void;
+type Payload = Record<string, unknown>;
+type SubscriptionCallback = (payload: Payload) => void;
 
 export class ContentCommunicationChannel extends CommunicationChannel {
   #client: Client;
   #subscriptions = new Map<Channel, SubscriptionCallback>();
+  #messages = new Map<Channel, Set<BroadcastMessage>>();
 
   constructor(client: Client, clients: Client[] = []) {
     super(client, clients);
@@ -49,10 +51,31 @@ export class ContentCommunicationChannel extends CommunicationChannel {
 
     this.#subscriptions.set(channel, callback as SubscriptionCallback);
 
+    const maybeMessages = this.#messages.get(channel);
+
+    if (maybeMessages) {
+      for (const message of maybeMessages) {
+        callback(message.payload as Payload);
+      }
+      this.#messages.delete(channel);
+    }
+
     return unsubscribeFromChannel;
   }
 
-  #broadcastListener: AddListener = (message, _sender, sendResponse) => {
+  #getOrCreateChannelMessages(channel: Channel): Set<BroadcastMessage> {
+    const maybeMessagesSet = this.#messages.get(channel);
+
+    if (!maybeMessagesSet) {
+      this.#messages.set(channel, new Set());
+
+      return this.#getOrCreateChannelMessages(channel);
+    }
+
+    return maybeMessagesSet;
+  }
+
+  #broadcastListener: AddListener = (message, _sender, sendResponse): void => {
     if (message?.type !== MessageType.BROADCAST_MESSAGE) {
       return;
     }
@@ -65,6 +88,9 @@ export class ContentCommunicationChannel extends CommunicationChannel {
 
       if (maybeSubscription) {
         maybeSubscription(payload);
+      } else {
+        const messages = this.#getOrCreateChannelMessages(channel);
+        messages.add(broadcastMessage);
       }
     }
 
