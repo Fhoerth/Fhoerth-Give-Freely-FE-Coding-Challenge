@@ -3,11 +3,15 @@ export const Bell: React.FC = () => {
     <div
       style={{
         width: '100px',
-        height: '40px',
-        background: '#fff',
+        height: '38px',
+        background: 'red',
+        cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        userSelect: 'none',
+        position: 'relative',
+        top: '4px',
       }}>
       Bell
     </div>
