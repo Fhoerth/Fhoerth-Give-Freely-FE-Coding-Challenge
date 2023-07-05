@@ -12,12 +12,15 @@ export const Bell: React.FC = () => {
   const channel = useCommunicationChannel();
 
   useEffect(() => {
-    channel.subscribeToChannel<ParticipantsChangeMessage>(
-      Channel.PARTICIPANTS_CHANGE,
-      ({ participants }) => {
-        setShowIcon(!!participants.length);
-      },
-    );
+    const unsubscribeFromParticipantsChannel =
+      channel.subscribeToChannel<ParticipantsChangeMessage>(
+        Channel.PARTICIPANTS_CHANGE,
+        ({ participants }) => {
+          setShowIcon(!!participants.length);
+        },
+      );
+
+    return unsubscribeFromParticipantsChannel;
   }, [channel]);
 
   const handleIconClick = useCallback((): void => {
