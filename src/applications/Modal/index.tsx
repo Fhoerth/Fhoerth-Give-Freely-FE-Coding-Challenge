@@ -4,6 +4,8 @@ import type { Participant } from '~API/types';
 import { useCommunicationChannel } from '~applications/Context';
 import { Channel, type OpenModalMessage } from '~communication-channel';
 import type { ParticipantsChangeMessage } from '~communication-channel';
+import { getRandomMessage } from '~utils/getRandomMessage';
+import { mergeMessages } from '~utils/mergeMessages';
 
 import { useModal } from './useModal';
 
@@ -15,7 +17,7 @@ export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
   const channel = useCommunicationChannel();
   const [loading, setLoading] = useState(true);
   const [participants, setParticipants] = useState<Participant[]>([]);
-  const [message, setMessage] = useState<string>('Lorem ipsum');
+  const [message, setMessage] = useState<string | null>(null);
   const [modalRef, showModal, setShowModal, modalStyle] = useModal(opened);
 
   useEffect(() => {
@@ -43,8 +45,11 @@ export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
   }, [channel, setShowModal, setParticipants]);
 
   useEffect(() => {
+    const allMessages = mergeMessages(participants);
+    const randomMessage = getRandomMessage(allMessages);
+
+    setMessage(randomMessage);
     setLoading(false);
-    setMessage('Lorem ipsum');
   }, [participants, setLoading, setMessage]);
 
   if (!showModal) {
@@ -56,7 +61,7 @@ export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
       ref={modalRef}
       className="absolute flex justify-center items-center w-96 h-44 bg-green-100 border-green-400 border-solid border-x border-y"
       style={modalStyle}>
-      {loading ? (
+      {loading || !message ? (
         <div role="status" className="max-w-sm animate-pulse">
           <div className="h-6 bg-gray-200 rounded-sm dark:bg-green-700 w-48 mb-4"></div>
         </div>
