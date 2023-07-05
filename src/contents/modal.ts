@@ -1,12 +1,7 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
 import { renderModal } from '~applications';
-import {
-  Channel,
-  Client,
-  ContentCommunicationChannel,
-} from '~communication-channel';
-import type { ParticipantsChangeMessage } from '~communication-channel';
+import { Client, ContentCommunicationChannel } from '~communication-channel';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
 
 export const config: PlasmoCSConfig = {
@@ -21,14 +16,6 @@ async function domContentLoaded(): Promise<void> {
   ]);
 
   await channel.initialize();
-
-  const fetchParticipantsResponse = await channel.fetchParticipants();
-
-  if (!fetchParticipantsResponse.success) {
-    throw new Error(fetchParticipantsResponse.message);
-  }
-
-  const participants = fetchParticipantsResponse.payload;
 
   renderModal(channel);
 }
