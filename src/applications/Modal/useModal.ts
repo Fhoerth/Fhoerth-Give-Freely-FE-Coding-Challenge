@@ -13,8 +13,8 @@ export function useModal(
 
   const [showModal, setShowModal] = useState<boolean>(opened);
   const [modalStyle, setModalStyle] = useState<CSSProperties>({
-    top: '-500px',
-    left: '-500px',
+    top: '-5000px',
+    left: '-5000px',
   });
 
   const calculatePosition = useCallback(
