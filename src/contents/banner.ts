@@ -31,7 +31,7 @@ function maybeGetFirstParticipant(
 
 async function domContentLoaded(): Promise<void> {
   try {
-    const channel = new ContentCommunicationChannel(Client.BELL);
+    const channel = new ContentCommunicationChannel(Client.BANNER);
 
     await channel.initialize();
 
