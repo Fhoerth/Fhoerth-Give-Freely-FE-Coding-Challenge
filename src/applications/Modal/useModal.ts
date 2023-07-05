@@ -11,7 +11,7 @@ export function useModal(
 ] {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(opened);
   const [modalStyle, setModalStyle] = useState<CSSProperties>({
     top: '-500px',
     left: '-500px',
@@ -31,12 +31,10 @@ export function useModal(
   );
 
   useEffect(() => {
-    setShowModal(opened);
-
     if (modalRef.current && showModal) {
       calculatePosition(modalRef.current);
     }
-  }, [opened, setShowModal, showModal, modalRef.current]);
+  }, [setShowModal, showModal, modalRef.current]);
 
   return [modalRef, showModal, setShowModal, modalStyle];
 }

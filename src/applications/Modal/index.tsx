@@ -19,7 +19,7 @@ export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
       channel.subscribeToChannel<ParticipantsChangeMessage>(
         Channel.MODAL,
         () => {
-          alert('Show Modal!');
+          setShowModal(true);
         },
       );
 
