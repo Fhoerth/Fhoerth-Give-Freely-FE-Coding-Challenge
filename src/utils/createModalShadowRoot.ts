@@ -1,10 +1,7 @@
-import baseCssText from 'data-text:~base.css';
-import cssText from 'data-text:~style.css';
+const maxZIndexForContent = Math.pow(2, 31) - 2;
 
-export function createModalShadowRoot(): HTMLDivElement {
-  const maxZIndexForContent = Math.pow(2, 31) - 2;
+export function createModalShadowRoot(styles: string[]): HTMLDivElement {
   const root = document.createElement('giveFreely-participants-modal');
-
   const shadowRoot = root.attachShadow({
     mode: 'closed',
   });
@@ -21,7 +18,7 @@ export function createModalShadowRoot(): HTMLDivElement {
   html.style.top = '0';
   html.style.left = '0';
 
-  style.textContent = baseCssText.concat('\n').concat(cssText);
+  style.textContent = styles.join('\n');
 
   html.append(body);
   shadowRoot.append(style);

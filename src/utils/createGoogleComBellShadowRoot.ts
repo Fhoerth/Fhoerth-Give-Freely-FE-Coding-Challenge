@@ -1,6 +1,3 @@
-import baseCssText from 'data-text:~base.css';
-import cssText from 'data-text:~style.css';
-
 import { assert } from '~utils/assert';
 
 function findFormContainer(): HTMLFormElement {
@@ -11,25 +8,25 @@ function findFormContainer(): HTMLFormElement {
   return form;
 }
 
-export function createGoogleComBellShadowRoot(): HTMLDivElement {
-  const form = findFormContainer();
-  const iconBar = form.nextElementSibling;
-
+export function createGoogleComBellShadowRoot(
+  styles: string[],
+): HTMLDivElement {
   const root = document.createElement('giveFreely-participant-banner');
   const shadowRoot = root.attachShadow({
     mode: 'closed',
   });
 
-  const html = document.createElement('div');
-  html.setAttribute('id', 'html');
+  const form = findFormContainer();
+  const iconBar = form.nextElementSibling;
 
+  const html = document.createElement('div');
   const body = document.createElement('div');
+  const style = document.createElement('style');
+
+  html.setAttribute('id', 'html');
   body.setAttribute('id', 'body');
 
-  const style = document.createElement('style');
-  style.textContent = baseCssText.concat('\n').concat(cssText);
-
-  root.style.position = 'relative';
+  style.textContent = styles.join('\n');
 
   html.append(body);
   shadowRoot.append(style);
