@@ -2,12 +2,17 @@ import type { Participant } from '~API/types';
 
 import { getDomain } from './getDomain';
 
+function createParticipantPattern(participant: Participant): string {
+  const domain = getDomain(participant.url);
+  return `^(https?://[a-zA-Z0-9-_]*)?\.?(${domain}).*`;
+}
+
 export function createParticipantsRegExp(participants: Participant[]): RegExp {
-  const domains = participants.map((participant) => getDomain(participant.url));
-  const patterns = domains.map(
-    (domain) => `(^https?://[a-zA-Z0-9-_]*\.?${domain}.*)`,
-  );
-  const regExp = new RegExp(patterns.join('|'), 'i');
+  const pattern = participants
+    .map(createParticipantPattern)
+    .map((pattern) => `(${pattern})`)
+    .join('|');
+  const regExp = new RegExp(pattern, 'i');
 
   return regExp;
 }

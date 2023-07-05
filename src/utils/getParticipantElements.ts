@@ -65,13 +65,33 @@ export function getParticipantElements(
   const matcher = createMatcher(participants);
   const participantAnchorElements = anchorElements.filter(matcher);
 
-  const domains = new Set(
-    participantAnchorElements.map(getHref).map(getDomain),
+  const participantsMap = new Map<string, Participant>(
+    participants.map((participant) => [
+      getDomain(participant.url),
+      participant,
+    ]),
   );
+  const participantsRegExp = createParticipantsRegExp(participants);
+  const anchorElementMatches = anchorElements.reduce(
+    (result, anchorElement) => {
+      const match =
+        getDomain(anchorElement.href).match(participantsRegExp) || [];
+      result.push(...match);
 
-  const participantsResult = participants.filter((participant) =>
-    domains.has(getDomain(participant.url)),
+      return result;
+    },
+    [] as string[],
   );
+  const anchorElementMatchesSet = new Set(anchorElementMatches);
+  const participantsResult: Participant[] = [];
+
+  for (const match of anchorElementMatchesSet) {
+    const maybeParticipant = participantsMap.get(match);
+
+    if (maybeParticipant) {
+      participantsResult.push(maybeParticipant);
+    }
+  }
 
   const closestElementsResult =
     participantAnchorElements.map(findClosestElement);
