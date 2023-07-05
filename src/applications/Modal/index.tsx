@@ -26,7 +26,7 @@ export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
     return () => {
       unsubscribeToModalChannel();
     };
-  }, [setShowModal]);
+  }, [channel, setShowModal]);
 
   if (!showModal) {
     return null;
