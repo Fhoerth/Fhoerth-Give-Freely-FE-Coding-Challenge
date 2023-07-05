@@ -14,6 +14,7 @@ export enum MessageType {
   FETCH_PARTICIPANTS_REQUEST,
   FETCH_PARTICIPANTS_RESPONSE,
   BROADCAST_MESSAGE,
+  OPEN_MODAL_MESSAGE,
 }
 
 export enum Channel {

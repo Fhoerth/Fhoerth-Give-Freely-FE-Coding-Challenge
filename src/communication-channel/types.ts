@@ -46,6 +46,7 @@ export type BroadcastMessage<P extends Record<string, unknown> = {}> = {
 };
 
 export type ParticipantsChangeMessage = { participants: Participant[] };
+export type OpenModalMessage = { opened: true };
 
 export type FetchParticipantsRequest = {
   type: MessageType.FETCH_PARTICIPANTS_REQUEST;
