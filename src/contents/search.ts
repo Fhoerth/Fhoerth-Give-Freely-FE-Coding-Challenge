@@ -5,9 +5,10 @@ import {
   Client,
   ContentCommunicationChannel,
   MessageType,
+  type ParticipantsChangeMessage,
 } from '~communication-channel';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
-import { getParticipantElementsToBeHighlighted } from '~utils/getParticipantElementsToBeHighlighted';
+import { getParticipantElements } from '~utils/getParticipantElements';
 
 export const config: PlasmoCSConfig = {
   matches: ['https://*.google.com/search*', 'https://*.google.com.ar/search*'],
@@ -36,7 +37,15 @@ async function domContentLoaded(): Promise<void> {
     }
   };
 
-  getParticipantElementsToBeHighlighted(participants).forEach(applyStyles);
+  const [matchedParticipants, matchedElements] =
+    getParticipantElements(participants);
+
+  matchedElements.forEach(applyStyles);
+
+  await channel.broadcast<ParticipantsChangeMessage>(
+    Channel.PARTICIPANTS_CHANGE,
+    { participants: matchedParticipants },
+  );
 }
 
 function main(): void {

@@ -25,7 +25,7 @@ async function domContentLoaded(): Promise<void> {
   channel.subscribeToChannel<ParticipantsChangeMessage>(
     Channel.PARTICIPANTS_CHANGE,
     (payload) => {
-      console.log('Received participants change message', payload.changed);
+      console.log('Received participants change message', payload.participants);
     },
   );
 

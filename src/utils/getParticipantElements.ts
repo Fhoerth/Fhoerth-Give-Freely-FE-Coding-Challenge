@@ -1,18 +1,21 @@
 import type { Participant } from '~API/types';
 
 import { createParticipantsRegExp } from './createParticipantsRegExp';
+import { getDomain } from './getDomain';
+
+function getHref(anchorElement: HTMLAnchorElement): string {
+  return anchorElement.href;
+}
 
 function createMatcher(participants: Participant[]) {
   const regExp = createParticipantsRegExp(participants);
   const predicate = (anchorElement: HTMLAnchorElement): boolean =>
-    !!regExp.exec(anchorElement.href);
+    !!regExp.exec(getHref(anchorElement));
 
   return predicate;
 }
 
-function findClosestElementToBeHighlighted(
-  anchorElement: HTMLAnchorElement,
-): Element {
+function findClosestElement(anchorElement: HTMLAnchorElement): Element {
   const maybeAd = anchorElement.closest('div[data-text-ad]');
 
   if (maybeAd) {
@@ -55,14 +58,23 @@ function findClosestElementToBeHighlighted(
   return anchorElement;
 }
 
-export function getParticipantElementsToBeHighlighted(
+export function getParticipantElements(
   participants: Participant[],
-): Element[] {
-  const anchorElements = document.querySelectorAll('a');
+): [Participant[], Element[]] {
+  const anchorElements = Array.from(document.querySelectorAll('a'));
   const matcher = createMatcher(participants);
-  const participantAnchorElements = Array.from(anchorElements)
-    .filter(matcher)
-    .map(findClosestElementToBeHighlighted);
+  const participantAnchorElements = anchorElements.filter(matcher);
 
-  return participantAnchorElements;
+  const domains = new Set(
+    participantAnchorElements.map(getHref).map(getDomain),
+  );
+
+  const participantsResult = participants.filter((participant) =>
+    domains.has(getDomain(participant.url)),
+  );
+
+  const closestElementsResult =
+    participantAnchorElements.map(findClosestElement);
+
+  return [participantsResult, closestElementsResult];
 }
