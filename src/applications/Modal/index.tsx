@@ -5,7 +5,7 @@ interface ModalProps {
   opened?: boolean;
 }
 
-export const Modal: React.FC<ModalProps> = ({ opened = true }) => {
+export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const [showModal, setShowModal] = useState<boolean>(false);
