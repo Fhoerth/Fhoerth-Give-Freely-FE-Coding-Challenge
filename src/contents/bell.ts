@@ -22,21 +22,14 @@ async function domContentLoaded(): Promise<void> {
 
   await channel.initialize();
 
-  channel.subscribeToChannel<ParticipantsChangeMessage>(
-    Channel.PARTICIPANTS_CHANGE,
-    (payload) => {
-      console.log('Received participants change message', payload.participants);
-    },
-  );
-
   const fetchParticipantsResponse = await channel.fetchParticipants();
-  const websites = fetchParticipantsResponse.payload;
+  const participants = fetchParticipantsResponse.payload;
 
-  console.log('Response from Bell', websites);
+  if (!fetchParticipantsResponse.success) {
+    throw new Error(fetchParticipantsResponse.message);
+  }
 
   renderBell(channel);
-
-  console.log('DOM Content Loaded - bell');
 }
 
 function main(): void {

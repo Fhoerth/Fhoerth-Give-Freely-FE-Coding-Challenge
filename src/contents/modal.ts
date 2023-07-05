@@ -23,13 +23,14 @@ async function domContentLoaded(): Promise<void> {
   await channel.initialize();
 
   const fetchParticipantsResponse = await channel.fetchParticipants();
-  const websites = fetchParticipantsResponse.payload;
 
-  console.log('Response from Modal', websites);
+  if (!fetchParticipantsResponse.success) {
+    throw new Error(fetchParticipantsResponse.message);
+  }
+
+  const participants = fetchParticipantsResponse.payload;
 
   renderModal(channel);
-
-  console.log('DOM Content Loaded - bell');
 }
 
 function main(): void {
