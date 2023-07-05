@@ -46,8 +46,6 @@ async function domContentLoaded(): Promise<void> {
     Channel.PARTICIPANTS_CHANGE,
     { participants: matchedParticipants },
   );
-
-  console.log('BROADCASTED', matchedParticipants);
 }
 
 function main(): void {
