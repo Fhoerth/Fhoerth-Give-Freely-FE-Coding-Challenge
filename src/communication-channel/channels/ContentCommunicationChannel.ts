@@ -39,10 +39,10 @@ export class ContentCommunicationChannel extends CommunicationChannel {
     return this.sendToBackground<BroadcastRequest, BroadcastResponse>(request);
   }
 
-  async subscribeToChannel<Payload extends Record<string, unknown>>(
+  subscribeToChannel<Payload extends Record<string, unknown>>(
     channel: Channel,
     callback: (payload: Payload) => void,
-  ): Promise<() => void> {
+  ): () => void {
     const unsubscribeFromChannel = () => {
       this.#subscriptions.delete(channel);
     };

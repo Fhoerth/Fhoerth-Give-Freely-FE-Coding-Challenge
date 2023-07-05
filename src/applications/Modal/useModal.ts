@@ -1,9 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { CSSProperties, RefObject } from 'react';
+import type { CSSProperties, Dispatch, RefObject, SetStateAction } from 'react';
 
 export function useModal(
   opened: boolean,
-): [RefObject<HTMLDivElement>, boolean, CSSProperties] {
+): [
+  RefObject<HTMLDivElement>,
+  boolean,
+  Dispatch<SetStateAction<boolean>>,
+  CSSProperties,
+] {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -33,5 +38,5 @@ export function useModal(
     }
   }, [opened, setShowModal, showModal, modalRef.current]);
 
-  return [modalRef, showModal, modalStyle];
+  return [modalRef, showModal, setShowModal, modalStyle];
 }

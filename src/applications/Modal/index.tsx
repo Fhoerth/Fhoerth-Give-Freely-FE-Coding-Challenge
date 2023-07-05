@@ -1,5 +1,8 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
+
+import { useCommunicationChannel } from '~applications/Context';
+import { Channel } from '~communication-channel';
+import type { ParticipantsChangeMessage } from '~communication-channel';
 
 import { useModal } from './useModal';
 
@@ -8,7 +11,22 @@ interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
-  const [modalRef, showModal, modalStyle] = useModal(opened);
+  const channel = useCommunicationChannel();
+  const [modalRef, showModal, setShowModal, modalStyle] = useModal(opened);
+
+  useEffect(() => {
+    const unsubscribeToModalChannel =
+      channel.subscribeToChannel<ParticipantsChangeMessage>(
+        Channel.MODAL,
+        () => {
+          alert('Show Modal!');
+        },
+      );
+
+    return () => {
+      unsubscribeToModalChannel();
+    };
+  }, [setShowModal]);
 
   if (!showModal) {
     return null;
