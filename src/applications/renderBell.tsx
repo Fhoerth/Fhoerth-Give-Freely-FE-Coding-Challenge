@@ -1,4 +1,4 @@
-import bellStyleText from 'data-text:./Bell/styles.css';
+import styles from 'data-text:./Bell/styles.css';
 import twBaseText from 'data-text:~base.css';
 import tWStyleText from 'data-text:~style.css';
 import { createRoot } from 'react-dom/client';
@@ -11,7 +11,7 @@ import { CommunicationChannelContextProvider } from './Context';
 
 export function renderBell(channel: ContentCommunicationChannel): void {
   const root = createRoot(
-    createGoogleComBellShadowRoot([bellStyleText, twBaseText, tWStyleText]),
+    createGoogleComBellShadowRoot([styles, twBaseText, tWStyleText]),
   );
 
   root.render(
