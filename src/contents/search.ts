@@ -4,7 +4,7 @@ import {
   Channel,
   Client,
   ContentCommunicationChannel,
-  MessageType,
+  Name,
   type ParticipantsChangeMessage,
 } from '~communication-channel';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
@@ -15,11 +15,11 @@ export const config: PlasmoCSConfig = {
 };
 
 async function domContentLoaded(): Promise<void> {
-  const channel = new ContentCommunicationChannel(Client.SEARCH, [
-    Client.SEARCH,
-    Client.BELL,
-    Client.MODAL,
-  ]);
+  const channel = new ContentCommunicationChannel({
+    name: Name.GOOGLE,
+    client: Client.SEARCH,
+    clients: [Client.BELL, Client.SEARCH, Client.MODAL],
+  });
 
   await channel.initialize();
 

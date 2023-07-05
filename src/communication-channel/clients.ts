@@ -1,18 +1,19 @@
 import { assert } from '~utils/assert';
 
 import type { Client } from './enums';
-import type { Callback, Id, MessageSender } from './types';
+import { Name } from './enums';
+import type { Callback, MessageSender } from './types';
 
 type TabId = number;
 type PopupUrl = string;
 
 class Clients {
-  #clients = new Map<Id, Client[]>();
+  #clients = new Map<Name, Client[]>();
   #clientsToBeConnected = new Map<
-    Id,
+    Name,
     { client: Client; callback: Callback }[]
   >();
-  #handshakePromises = new Map<Id, Promise<void[]>>();
+  #handshakePromises = new Map<Name, Promise<void[]>>();
 
   static createVoidPromise(): Callback {
     let resolvePromise: () => void;
@@ -26,31 +27,31 @@ class Clients {
     return { promise, resolve: resolvePromise!, reject: rejectPromise! };
   }
 
-  getOrCreateClients(id: Id, clients: Client[]): Client[] {
-    const maybeClients = this.#clients.get(id);
+  getOrCreateClients(name: Name, clients: Client[]): Client[] {
+    const maybeClients = this.#clients.get(name);
 
     if (!maybeClients) {
-      this.#clients.set(id, clients);
+      this.#clients.set(name, clients);
 
-      return this.getOrCreateClients(id, clients);
+      return this.getOrCreateClients(name, clients);
     }
 
     return maybeClients;
   }
 
   getOrCreateClientToBeConnected(
-    id: Id,
+    name: Name,
     client: Client,
   ): {
     client: Client;
     callback: Callback;
   } {
-    const maybeClientsToBeConnected = this.#clientsToBeConnected.get(id);
+    const maybeClientsToBeConnected = this.#clientsToBeConnected.get(name);
 
     if (!maybeClientsToBeConnected) {
-      this.#clientsToBeConnected.set(id, []);
+      this.#clientsToBeConnected.set(name, []);
 
-      return this.getOrCreateClientToBeConnected(id, client);
+      return this.getOrCreateClientToBeConnected(name, client);
     }
 
     const maybeClientToBeConnected = maybeClientsToBeConnected.find(
@@ -63,28 +64,28 @@ class Clients {
         callback: Clients.createVoidPromise(),
       });
 
-      return this.getOrCreateClientToBeConnected(id, client);
+      return this.getOrCreateClientToBeConnected(name, client);
     }
 
     return maybeClientToBeConnected;
   }
 
-  maybeCreateHandshakePromises(id: Id, clients: Client[]): Promise<void[]> {
-    const maybePromises = this.#handshakePromises.get(id);
+  maybeCreateHandshakePromises(name: Name, clients: Client[]): Promise<void[]> {
+    const maybePromises = this.#handshakePromises.get(name);
 
     if (!maybePromises) {
-      const tabClients = this.getOrCreateClients(id, clients);
+      const tabClients = this.getOrCreateClients(name, clients);
       const promises = Promise.all(
         tabClients
           .map((clientName) =>
-            this.getOrCreateClientToBeConnected(id, clientName),
+            this.getOrCreateClientToBeConnected(name, clientName),
           )
           .map(({ callback }) => callback.promise),
       );
 
-      this.#handshakePromises.set(id, promises);
+      this.#handshakePromises.set(name, promises);
 
-      return this.maybeCreateHandshakePromises(id, clients);
+      return this.maybeCreateHandshakePromises(name, clients);
     }
 
     return maybePromises;
@@ -109,7 +110,7 @@ class Clients {
     return false;
   }
 
-  getId(sender: MessageSender): Id {
+  getId(sender: MessageSender): string {
     const { id } = sender.tab || {};
     const { url } = sender;
 
@@ -124,8 +125,8 @@ class Clients {
     throw new Error('sender must comer from a tab or the popup extension');
   }
 
-  getClients(id: Id): Client[] | null {
-    return this.#clients.get(id) || null;
+  getClients(name: Name): Client[] | null {
+    return this.#clients.get(name) || null;
   }
 }
 

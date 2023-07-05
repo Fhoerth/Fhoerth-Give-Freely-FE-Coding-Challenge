@@ -1,3 +1,8 @@
+export enum Name {
+  GOOGLE = 'GOOGLE',
+  BANNER = 'BANNER',
+}
+
 export enum Client {
   BELL,
   SEARCH,

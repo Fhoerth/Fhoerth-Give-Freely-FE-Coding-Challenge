@@ -1,6 +1,6 @@
 import { browser } from '~browser';
 
-import { Channel, Client, MessageType } from '../enums';
+import { Channel, Client, MessageType, Name } from '../enums';
 import type {
   AddListener,
   BroadcastMessage,
@@ -8,18 +8,21 @@ import type {
   BroadcastResponse,
 } from '../types';
 import { CommunicationChannel } from './CommunicationChannel';
+import type { Options } from './CommunicationChannel';
 
 type Payload = Record<string, unknown>;
 type SubscriptionCallback = (payload: Payload) => void;
 
 export class ContentCommunicationChannel extends CommunicationChannel {
+  #name: Name;
   #client: Client;
   #subscriptions = new Map<Channel, SubscriptionCallback>();
   #messages = new Map<Channel, Set<BroadcastMessage>>();
 
-  constructor(client: Client, clients: Client[] = []) {
-    super(client, clients);
-    this.#client = client;
+  constructor(options: Options) {
+    super(options);
+    this.#name = options.name;
+    this.#client = options.client;
   }
 
   async initialize(): Promise<void> {
@@ -32,9 +35,10 @@ export class ContentCommunicationChannel extends CommunicationChannel {
     payload: Payload,
   ): Promise<BroadcastResponse> {
     const request: BroadcastRequest = {
-      type: MessageType.BROADCAST_REQUEST,
       channel,
       payload,
+      type: MessageType.BROADCAST_REQUEST,
+      name: this.#name,
       sender: this.#client,
     };
 
@@ -81,9 +85,13 @@ export class ContentCommunicationChannel extends CommunicationChannel {
     }
 
     const broadcastMessage: BroadcastMessage = message;
-    const { sender, recipient, channel, payload } = broadcastMessage;
+    const { name, sender, recipient, channel, payload } = broadcastMessage;
 
-    if (sender !== this.#client && recipient === this.#client) {
+    if (
+      name === this.#name &&
+      recipient === this.#client &&
+      sender !== this.#client
+    ) {
       const maybeSubscription = this.#subscriptions.get(channel);
 
       if (maybeSubscription) {

@@ -1,7 +1,11 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
 import { renderBell } from '~applications';
-import { Client, ContentCommunicationChannel } from '~communication-channel';
+import {
+  Client,
+  ContentCommunicationChannel,
+  Name,
+} from '~communication-channel';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
 
 export const config: PlasmoCSConfig = {
@@ -9,11 +13,11 @@ export const config: PlasmoCSConfig = {
 };
 
 async function domContentLoaded(): Promise<void> {
-  const channel = new ContentCommunicationChannel(Client.BELL, [
-    Client.BELL,
-    Client.SEARCH,
-    Client.MODAL,
-  ]);
+  const channel = new ContentCommunicationChannel({
+    name: Name.GOOGLE,
+    client: Client.BELL,
+    clients: [Client.BELL, Client.SEARCH, Client.MODAL],
+  });
 
   await channel.initialize();
 
