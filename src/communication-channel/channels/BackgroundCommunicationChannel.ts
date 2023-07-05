@@ -82,7 +82,11 @@ export class BackgroundCommunicationChannel {
     return true;
   };
 
-  #broadcastListener: AddListener = (request, sender, sendResponse) => {
+  #broadcastListener: AddListener = (
+    request,
+    sender,
+    sendResponse,
+  ): void | boolean => {
     if (request?.type !== MessageType.BROADCAST_REQUEST) {
       return;
     }
@@ -103,7 +107,7 @@ export class BackgroundCommunicationChannel {
       };
 
       try {
-        sendResponse(broadcastResponse);
+        return sendResponse(broadcastResponse);
       } catch {
         console.error(`Couldn't send response to tab id ${id}`);
       }
@@ -116,11 +120,12 @@ export class BackgroundCommunicationChannel {
       (client) => client !== broadcastRequest.sender,
     );
 
-    Promise.all(
+    void Promise.all(
       recipients.map(
-        () =>
+        (recipient) =>
           new Promise<void>((resolve, reject) => {
             const broadcastMessage: BroadcastMessage = {
+              recipient,
               type: MessageType.BROADCAST_MESSAGE,
               channel: broadcastRequest.channel,
               payload: broadcastRequest.payload,
@@ -143,9 +148,9 @@ export class BackgroundCommunicationChannel {
         };
 
         try {
-          sendResponse(broadcastResponse);
+          return sendResponse(broadcastResponse);
         } catch {
-          console.error(`Couldn't send response to tab id ${id}`);
+          throw new Error(`Couldn't send response to tab id ${id}`);
         }
       })
       .catch((reason) => {
@@ -156,7 +161,7 @@ export class BackgroundCommunicationChannel {
         };
 
         try {
-          sendResponse(broadcastResponse);
+          return sendResponse(broadcastResponse);
         } catch {
           console.error(`Couldn't send response to tab id ${id}`);
         }
@@ -184,7 +189,7 @@ export class BackgroundCommunicationChannel {
         try {
           sendResponse(fetchParticipantsResponse);
         } catch {
-          console.error(`Couldn't send response to tab id ${id}`);
+          throw new Error(`Couldn't send response to tab id ${id}`);
         }
       })
       .catch(() => {
@@ -200,6 +205,8 @@ export class BackgroundCommunicationChannel {
         } catch {
           console.error(`Couldn't send response to tab id ${id}`);
         }
+
+        return;
       });
 
     return true;

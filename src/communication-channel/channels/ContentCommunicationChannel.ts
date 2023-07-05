@@ -58,14 +58,13 @@ export class ContentCommunicationChannel extends CommunicationChannel {
     }
 
     const broadcastMessage: BroadcastMessage = message;
+    const { sender, recipient, channel, payload } = broadcastMessage;
 
-    if (broadcastMessage.sender !== this.#client) {
-      const maybeSubscription = this.#subscriptions.get(
-        broadcastMessage.channel,
-      );
+    if (sender !== this.#client && recipient === this.#client) {
+      const maybeSubscription = this.#subscriptions.get(channel);
 
       if (maybeSubscription) {
-        maybeSubscription(broadcastMessage.payload);
+        maybeSubscription(payload);
       }
     }
 

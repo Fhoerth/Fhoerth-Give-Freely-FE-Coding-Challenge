@@ -42,6 +42,7 @@ export type BroadcastMessage<P extends Record<string, unknown> = {}> = {
   type: MessageType.BROADCAST_MESSAGE;
   channel: Channel;
   sender: Client;
+  recipient: Client;
   payload: P;
 };
 
