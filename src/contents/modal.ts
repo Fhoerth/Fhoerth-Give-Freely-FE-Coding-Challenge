@@ -2,9 +2,9 @@ import type { PlasmoCSConfig } from 'plasmo';
 
 import { renderModal } from '~applications';
 import {
+  ChannelName,
   Client,
   ContentCommunicationChannel,
-  Name,
 } from '~communication-channel';
 import { onDomContentLoaded } from '~contents-utils/onDomContentLoaded';
 
@@ -14,7 +14,7 @@ export const config: PlasmoCSConfig = {
 
 async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel({
-    name: Name.GOOGLE,
+    channelName: ChannelName.GOOGLE,
     client: Client.MODAL,
     clients: [Client.BELL, Client.SEARCH, Client.MODAL],
   });
