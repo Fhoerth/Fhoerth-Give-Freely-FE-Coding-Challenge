@@ -4,7 +4,7 @@ import type { Participant } from '~API/types';
 import { useCommunicationChannel } from '~applications/Context';
 import { Channel, type OpenModalMessage } from '~communication-channel';
 import type { ParticipantsChangeMessage } from '~communication-channel';
-import { getRandomMessage } from '~utils/getRandomMessage';
+import { getRandomElement } from '~utils/getRandomElement';
 import { mergeMessages } from '~utils/mergeMessages';
 
 import { useModal } from './useModal';
@@ -46,7 +46,7 @@ export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
 
   useEffect(() => {
     const allMessages = mergeMessages(participants);
-    const randomMessage = getRandomMessage(allMessages);
+    const randomMessage = getRandomElement(allMessages);
 
     setMessage(randomMessage);
     setLoading(false);

@@ -20,10 +20,10 @@ export function useModal(
   const calculatePosition = useCallback(
     (htmlDivElement: HTMLDivElement): void => {
       const { innerWidth, innerHeight } = window;
-      const { width, height } = htmlDivElement.getBoundingClientRect();
+      const { width } = htmlDivElement.getBoundingClientRect();
 
       const left = innerWidth / 2 - width / 2;
-      const top = innerHeight / 2 - height / 2;
+      const top = '50px';
 
       setModalStyle({ ...modalStyle, left, top });
     },
