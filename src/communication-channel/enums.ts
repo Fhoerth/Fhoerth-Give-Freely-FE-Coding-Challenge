@@ -19,4 +19,5 @@ export enum MessageType {
 
 export enum Channel {
   PARTICIPANTS_CHANGE,
+  MODAL,
 }
