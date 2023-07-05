@@ -1,0 +1,11 @@
+.giveFreely__bell-icon {
+  width: '40px';
+  height: '38px';
+  cursor: 'pointer';
+  display: 'flex';
+  align-items: 'center';
+  justify-content: 'center';
+  user-select: 'none';
+  position: 'relative';
+  top: '4px';
+}
