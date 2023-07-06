@@ -129,7 +129,7 @@ export class BackgroundCommunicationChannel {
               recipient,
               channelName: broadcastRequest.channelName,
               type: MessageType.BROADCAST_MESSAGE,
-              channel: broadcastRequest.channel,
+              broadcastChannel: broadcastRequest.broadcastChannel,
               payload: broadcastRequest.payload,
               sender: broadcastRequest.sender,
             };

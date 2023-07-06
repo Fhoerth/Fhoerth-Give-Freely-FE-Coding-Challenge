@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import type { Participant } from '~API/types';
 import { useCommunicationChannel } from '~applications/common/Context';
-import { Channel } from '~communication-channel/enums';
+import { BroadcastChannel } from '~communication-channel/enums';
 import type {
   OpenModalMessage,
   ParticipantsChangeMessage,
@@ -29,13 +29,16 @@ export const Modal: React.FC<ModalProps> = ({ opened = false }) => {
 
   useEffect(() => {
     const unsubscribeFromModalChannel =
-      channel.subscribeToChannel<OpenModalMessage>(Channel.MODAL, () => {
-        setShowModal(true);
-      });
+      channel.subscribeToChannel<OpenModalMessage>(
+        BroadcastChannel.MODAL,
+        () => {
+          setShowModal(true);
+        },
+      );
 
     const unsubscribeFromParticipantsChannel =
       channel.subscribeToChannel<ParticipantsChangeMessage>(
-        Channel.PARTICIPANTS_CHANGE,
+        BroadcastChannel.PARTICIPANTS_CHANGE,
         ({ participants }) => {
           setParticipants(participants);
         },

@@ -1,7 +1,11 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
 import { ContentCommunicationChannel } from '~communication-channel/channels/ContentCommunicationChannel';
-import { Channel, ChannelName, Client } from '~communication-channel/enums';
+import {
+  BroadcastChannel,
+  ChannelName,
+  Client,
+} from '~communication-channel/enums';
 import type { ParticipantsChangeMessage } from '~communication-channel/types';
 import { getParticipantElements } from '~utils/getParticipantElements';
 import { onDomContentLoaded } from '~utils/onDomContentLoaded';
@@ -39,7 +43,7 @@ async function domContentLoaded(): Promise<void> {
   matchedElements.forEach(applyStyles);
 
   await channel.broadcast<ParticipantsChangeMessage>(
-    Channel.PARTICIPANTS_CHANGE,
+    BroadcastChannel.PARTICIPANTS_CHANGE,
     { participants: matchedParticipants },
   );
 }

@@ -1,6 +1,6 @@
 import type { Participant } from '~API/types';
 
-import { Channel, ChannelName, Client, MessageType } from './enums';
+import { BroadcastChannel, ChannelName, Client, MessageType } from './enums';
 
 export type AddListener = Parameters<
   typeof chrome.runtime.onMessage.addListener
@@ -27,7 +27,7 @@ export type PingResponse = {
 
 export type BroadcastRequest<P extends Record<string, unknown> = {}> = {
   type: MessageType.BROADCAST_REQUEST;
-  channel: Channel;
+  broadcastChannel: BroadcastChannel;
   channelName: ChannelName;
   sender: Client;
   payload: P;
@@ -43,7 +43,7 @@ export type BroadcastResponse = {
 export type BroadcastMessage<P extends Record<string, unknown> = {}> = {
   type: MessageType.BROADCAST_MESSAGE;
   channelName: ChannelName;
-  channel: Channel;
+  broadcastChannel: BroadcastChannel;
   sender: Client;
   recipient: Client;
   payload: P;

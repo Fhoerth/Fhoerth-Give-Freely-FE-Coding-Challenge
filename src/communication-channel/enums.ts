@@ -24,7 +24,7 @@ export enum MessageType {
   OPEN_MODAL_MESSAGE,
 }
 
-export enum Channel {
+export enum BroadcastChannel {
   PARTICIPANTS_CHANGE,
   MODAL,
 }

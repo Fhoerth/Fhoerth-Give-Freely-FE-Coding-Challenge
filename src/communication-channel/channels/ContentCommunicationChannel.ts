@@ -1,6 +1,6 @@
 import { browser } from '~browser';
 
-import { Channel, ChannelName, Client, MessageType } from '../enums';
+import { BroadcastChannel, ChannelName, Client, MessageType } from '../enums';
 import type {
   AddListener,
   BroadcastMessage,
@@ -16,8 +16,8 @@ type SubscriptionCallback = (payload: Payload) => void;
 export class ContentCommunicationChannel extends CommunicationChannel {
   #channelName: ChannelName;
   #client: Client;
-  #subscriptions = new Map<Channel, SubscriptionCallback>();
-  #messages = new Map<Channel, Set<BroadcastMessage>>();
+  #subscriptions = new Map<BroadcastChannel, SubscriptionCallback>();
+  #messages = new Map<BroadcastChannel, Set<BroadcastMessage>>();
 
   constructor(options: Options) {
     super(options);
@@ -31,11 +31,11 @@ export class ContentCommunicationChannel extends CommunicationChannel {
   }
 
   async broadcast<Payload extends Record<string, unknown>>(
-    channel: Channel,
+    broadcastChannel: BroadcastChannel,
     payload: Payload,
   ): Promise<BroadcastResponse> {
     const request: BroadcastRequest = {
-      channel,
+      broadcastChannel,
       payload,
       type: MessageType.BROADCAST_REQUEST,
       channelName: this.#channelName,
@@ -46,34 +46,37 @@ export class ContentCommunicationChannel extends CommunicationChannel {
   }
 
   subscribeToChannel<Payload extends Record<string, unknown>>(
-    channel: Channel,
+    broadcastChannel: BroadcastChannel,
     callback: (payload: Payload) => void,
   ): () => void {
-    const unsubscribeFromChannel = () => {
-      this.#subscriptions.delete(channel);
+    const unsubscribeFromBroadcastChannel = () => {
+      this.#subscriptions.delete(broadcastChannel);
     };
 
-    this.#subscriptions.set(channel, callback as SubscriptionCallback);
+    this.#subscriptions.set(broadcastChannel, callback as SubscriptionCallback);
 
-    const maybeMessages = this.#messages.get(channel);
+    const maybeMessages = this.#messages.get(broadcastChannel);
 
     if (maybeMessages) {
       for (const message of maybeMessages) {
         callback(message.payload as Payload);
       }
-      this.#messages.delete(channel);
+
+      this.#messages.delete(broadcastChannel);
     }
 
-    return unsubscribeFromChannel;
+    return unsubscribeFromBroadcastChannel;
   }
 
-  #getOrCreateChannelMessages(channel: Channel): Set<BroadcastMessage> {
-    const maybeMessagesSet = this.#messages.get(channel);
+  #getOrCreateChannelMessages(
+    broadcastChannel: BroadcastChannel,
+  ): Set<BroadcastMessage> {
+    const maybeMessagesSet = this.#messages.get(broadcastChannel);
 
     if (!maybeMessagesSet) {
-      this.#messages.set(channel, new Set());
+      this.#messages.set(broadcastChannel, new Set());
 
-      return this.#getOrCreateChannelMessages(channel);
+      return this.#getOrCreateChannelMessages(broadcastChannel);
     }
 
     return maybeMessagesSet;
@@ -85,7 +88,7 @@ export class ContentCommunicationChannel extends CommunicationChannel {
     }
 
     const broadcastMessage: BroadcastMessage = message;
-    const { channelName, sender, recipient, channel, payload } =
+    const { channelName, sender, recipient, broadcastChannel, payload } =
       broadcastMessage;
 
     if (
@@ -93,12 +96,12 @@ export class ContentCommunicationChannel extends CommunicationChannel {
       recipient === this.#client &&
       sender !== this.#client
     ) {
-      const maybeSubscription = this.#subscriptions.get(channel);
+      const maybeSubscription = this.#subscriptions.get(broadcastChannel);
 
       if (maybeSubscription) {
         maybeSubscription(payload);
       } else {
-        const messages = this.#getOrCreateChannelMessages(channel);
+        const messages = this.#getOrCreateChannelMessages(broadcastChannel);
         messages.add(broadcastMessage);
       }
     }

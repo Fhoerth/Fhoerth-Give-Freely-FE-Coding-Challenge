@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useCommunicationChannel } from '~applications/common/Context';
-import { Channel } from '~communication-channel/enums';
+import { BroadcastChannel } from '~communication-channel/enums';
 import type {
   OpenModalMessage,
   ParticipantsChangeMessage,
@@ -14,7 +14,7 @@ export const Bell: React.FC = () => {
   useEffect(() => {
     const unsubscribeFromParticipantsChannel =
       channel.subscribeToChannel<ParticipantsChangeMessage>(
-        Channel.PARTICIPANTS_CHANGE,
+        BroadcastChannel.PARTICIPANTS_CHANGE,
         ({ participants }) => {
           setShowIcon(!!participants.length);
         },
@@ -26,7 +26,7 @@ export const Bell: React.FC = () => {
   const handleIconClick = useCallback((): void => {
     async function emitEvent() {
       try {
-        await channel.broadcast<OpenModalMessage>(Channel.MODAL, {
+        await channel.broadcast<OpenModalMessage>(BroadcastChannel.MODAL, {
           opened: true,
         });
       } catch (reason) {
