@@ -1,6 +1,6 @@
 import { browser } from '~browser';
 
-import { BroadcastChannel, ChannelName, Client, MessageType } from '../enums';
+import { BroadcastChannel, ChannelId, Client, MessageType } from '../enums';
 import type {
   AddListener,
   BroadcastMessage,
@@ -14,14 +14,14 @@ type Payload = Record<string, unknown>;
 type SubscriptionCallback = (payload: Payload) => void;
 
 export class ContentCommunicationChannel extends CommunicationChannel {
-  #channelName: ChannelName;
+  #channelId: ChannelId;
   #client: Client;
   #subscriptions = new Map<BroadcastChannel, SubscriptionCallback>();
   #messages = new Map<BroadcastChannel, Set<BroadcastMessage>>();
 
   constructor(options: Options) {
     super(options);
-    this.#channelName = options.channelName;
+    this.#channelId = options.channelId;
     this.#client = options.client;
   }
 
@@ -38,7 +38,7 @@ export class ContentCommunicationChannel extends CommunicationChannel {
       broadcastChannel,
       payload,
       type: MessageType.BROADCAST_REQUEST,
-      channelName: this.#channelName,
+      channelId: this.#channelId,
       sender: this.#client,
     };
 
@@ -88,11 +88,11 @@ export class ContentCommunicationChannel extends CommunicationChannel {
     }
 
     const broadcastMessage: BroadcastMessage = message;
-    const { channelName, sender, recipient, broadcastChannel, payload } =
+    const { channelId, sender, recipient, broadcastChannel, payload } =
       broadcastMessage;
 
     if (
-      channelName === this.#channelName &&
+      channelId === this.#channelId &&
       recipient === this.#client &&
       sender !== this.#client
     ) {

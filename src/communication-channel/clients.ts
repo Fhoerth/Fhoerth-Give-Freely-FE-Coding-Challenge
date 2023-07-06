@@ -1,19 +1,19 @@
 import { assert } from '~utils/assert';
 
 import type { Client } from './enums';
-import { ChannelName } from './enums';
+import { ChannelId } from './enums';
 import type { Callback, MessageSender } from './types';
 
 type TabId = number;
 type PopupUrl = string;
 
 class Clients {
-  #clients = new Map<ChannelName, Client[]>();
+  #clients = new Map<ChannelId, Client[]>();
   #clientsToBeConnected = new Map<
-    ChannelName,
+    ChannelId,
     { client: Client; callback: Callback }[]
   >();
-  #handshakePromises = new Map<ChannelName, Promise<void[]>>();
+  #handshakePromises = new Map<ChannelId, Promise<void[]>>();
 
   static createVoidPromise(): Callback {
     let resolvePromise: () => void;
@@ -27,32 +27,31 @@ class Clients {
     return { promise, resolve: resolvePromise!, reject: rejectPromise! };
   }
 
-  getOrCreateClients(channelName: ChannelName, clients: Client[]): Client[] {
-    const maybeClients = this.#clients.get(channelName);
+  getOrCreateClients(channelId: ChannelId, clients: Client[]): Client[] {
+    const maybeClients = this.#clients.get(channelId);
 
     if (!maybeClients) {
-      this.#clients.set(channelName, clients);
+      this.#clients.set(channelId, clients);
 
-      return this.getOrCreateClients(channelName, clients);
+      return this.getOrCreateClients(channelId, clients);
     }
 
     return maybeClients;
   }
 
   getOrCreateClientToBeConnected(
-    channelName: ChannelName,
+    channelId: ChannelId,
     client: Client,
   ): {
     client: Client;
     callback: Callback;
   } {
-    const maybeClientsToBeConnected =
-      this.#clientsToBeConnected.get(channelName);
+    const maybeClientsToBeConnected = this.#clientsToBeConnected.get(channelId);
 
     if (!maybeClientsToBeConnected) {
-      this.#clientsToBeConnected.set(channelName, []);
+      this.#clientsToBeConnected.set(channelId, []);
 
-      return this.getOrCreateClientToBeConnected(channelName, client);
+      return this.getOrCreateClientToBeConnected(channelId, client);
     }
 
     const maybeClientToBeConnected = maybeClientsToBeConnected.find(
@@ -65,31 +64,31 @@ class Clients {
         callback: Clients.createVoidPromise(),
       });
 
-      return this.getOrCreateClientToBeConnected(channelName, client);
+      return this.getOrCreateClientToBeConnected(channelId, client);
     }
 
     return maybeClientToBeConnected;
   }
 
   maybeCreateHandshakePromises(
-    channelName: ChannelName,
+    channelId: ChannelId,
     clients: Client[],
   ): Promise<void[]> {
-    const maybePromises = this.#handshakePromises.get(channelName);
+    const maybePromises = this.#handshakePromises.get(channelId);
 
     if (!maybePromises) {
-      const tabClients = this.getOrCreateClients(channelName, clients);
+      const tabClients = this.getOrCreateClients(channelId, clients);
       const promises = Promise.all(
         tabClients
-          .map((clientName) =>
-            this.getOrCreateClientToBeConnected(channelName, clientName),
+          .map((clientId) =>
+            this.getOrCreateClientToBeConnected(channelId, clientId),
           )
           .map(({ callback }) => callback.promise),
       );
 
-      this.#handshakePromises.set(channelName, promises);
+      this.#handshakePromises.set(channelId, promises);
 
-      return this.maybeCreateHandshakePromises(channelName, clients);
+      return this.maybeCreateHandshakePromises(channelId, clients);
     }
 
     return maybePromises;
@@ -129,8 +128,8 @@ class Clients {
     throw new Error('sender must comer from a tab or the popup extension');
   }
 
-  getClients(channelName: ChannelName): Client[] | null {
-    return this.#clients.get(channelName) || null;
+  getClients(channelId: ChannelId): Client[] | null {
+    return this.#clients.get(channelId) || null;
   }
 }
 

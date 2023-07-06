@@ -1,4 +1,4 @@
-export enum ChannelName {
+export enum ChannelId {
   GOOGLE = 'GOOGLE',
   BANNER = 'BANNER',
   POPUP = 'POPUP',

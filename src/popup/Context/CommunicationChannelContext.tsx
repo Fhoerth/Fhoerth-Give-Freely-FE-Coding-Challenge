@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import type { Participant } from '~API/types';
 import { PopupCommunicationChannel } from '~communication-channel/channels/PopupCommunicationChannel';
-import { ChannelName, Client } from '~communication-channel/enums';
+import { ChannelId, Client } from '~communication-channel/enums';
 
 type CommunicationChannelContextValue = PopupCommunicationChannel;
 
@@ -23,7 +23,7 @@ export const CommunicationChannelContextProvider: React.FC<
   const channel = useMemo(
     () =>
       new PopupCommunicationChannel({
-        channelName: ChannelName.POPUP,
+        channelId: ChannelId.POPUP,
         client: Client.POPUP,
         clients: [],
       }),

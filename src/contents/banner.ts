@@ -3,7 +3,7 @@ import type { PlasmoCSConfig } from 'plasmo';
 import type { Participant } from '~API/types';
 import { renderBanner } from '~applications/banner/renderBanner';
 import { ContentCommunicationChannel } from '~communication-channel/channels/ContentCommunicationChannel';
-import { ChannelName, Client } from '~communication-channel/enums';
+import { ChannelId, Client } from '~communication-channel/enums';
 import { createParticipantsRegExp } from '~utils/createParticipantsRegExp';
 import { getDomain } from '~utils/getDomain';
 import { onDomContentLoaded } from '~utils/onDomContentLoaded';
@@ -33,7 +33,7 @@ function maybeGetFirstParticipant(
 async function domContentLoaded(): Promise<void> {
   try {
     const channel = new ContentCommunicationChannel({
-      channelName: ChannelName.BANNER,
+      channelId: ChannelId.BANNER,
       client: Client.BELL,
       clients: [],
     });

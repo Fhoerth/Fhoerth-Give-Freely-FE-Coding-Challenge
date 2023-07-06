@@ -3,7 +3,7 @@ import type { PlasmoCSConfig } from 'plasmo';
 import { ContentCommunicationChannel } from '~communication-channel/channels/ContentCommunicationChannel';
 import {
   BroadcastChannel,
-  ChannelName,
+  ChannelId,
   Client,
 } from '~communication-channel/enums';
 import type { ParticipantsChangeMessage } from '~communication-channel/types';
@@ -16,7 +16,7 @@ export const config: PlasmoCSConfig = {
 
 async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel({
-    channelName: ChannelName.GOOGLE,
+    channelId: ChannelId.GOOGLE,
     client: Client.SEARCH,
     clients: [Client.BELL, Client.SEARCH, Client.MODAL],
   });
