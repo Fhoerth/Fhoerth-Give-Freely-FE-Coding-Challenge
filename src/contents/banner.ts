@@ -31,34 +31,24 @@ function maybeGetFirstParticipant(
 }
 
 async function domContentLoaded(): Promise<void> {
-  try {
-    const channel = new ContentCommunicationChannel({
-      channelId: ChannelId.BANNER,
-      client: Client.BELL,
-      clients: [],
-    });
+  const channel = new ContentCommunicationChannel({
+    channelId: ChannelId.BANNER,
+    client: Client.BELL,
+    clients: [],
+  });
 
-    await channel.initialize();
+  await channel.initialize();
 
-    const fetchParticipantsResponse = await channel.fetchParticipants();
+  const { payload: participants } = await channel.fetchParticipants();
+  const maybeFirstParticipant = maybeGetFirstParticipant(participants);
 
-    if (!fetchParticipantsResponse.success) {
-      throw new Error(fetchParticipantsResponse.message);
-    }
+  if (maybeFirstParticipant) {
+    const participant = maybeFirstParticipant;
+    renderBanner(participant);
 
-    const participants = fetchParticipantsResponse.payload;
-    const maybeFirstParticipant = maybeGetFirstParticipant(participants);
-
-    if (maybeFirstParticipant) {
-      const participant = maybeFirstParticipant;
+    window.addEventListener('locationchange', () => {
       renderBanner(participant);
-
-      window.addEventListener('locationchange', () => {
-        renderBanner(participant);
-      });
-    }
-  } catch (error) {
-    console.log(error);
+    });
   }
 }
 

@@ -57,19 +57,11 @@ export class CommunicationChannel {
   }
 
   async fetchParticipants(): Promise<FetchParticipantsResponse> {
-    const response = await this.sendToBackground<
+    return this.sendToBackground<
       FetchParticipantsRequest,
       FetchParticipantsResponse
     >({
       type: MessageType.FETCH_PARTICIPANTS_REQUEST,
-    });
-
-    return new Promise<FetchParticipantsResponse>((resolve, reject): void => {
-      if (response.success) {
-        return resolve(response);
-      }
-
-      reject(response);
     });
   }
 }

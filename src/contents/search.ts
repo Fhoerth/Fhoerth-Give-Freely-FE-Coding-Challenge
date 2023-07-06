@@ -14,6 +14,12 @@ export const config: PlasmoCSConfig = {
   matches: ['https://*.google.com/search*', 'https://*.google.com.ar/search*'],
 };
 
+const applyMatchedElementStyle = (element: Element): void => {
+  if (element instanceof HTMLElement) {
+    element.style.border = '1px solid red';
+  }
+};
+
 async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel({
     channelId: ChannelId.GOOGLE,
@@ -23,24 +29,11 @@ async function domContentLoaded(): Promise<void> {
 
   await channel.initialize();
 
-  const fetchParticipantsResponse = await channel.fetchParticipants();
-
-  if (!fetchParticipantsResponse.success) {
-    throw new Error(fetchParticipantsResponse.message);
-  }
-
-  const participants = fetchParticipantsResponse.payload;
-
-  const applyStyles = (element: Element): void => {
-    if (element instanceof HTMLElement) {
-      element.style.border = '1px solid red';
-    }
-  };
-
+  const { payload: participants } = await channel.fetchParticipants();
   const [matchedParticipants, matchedElements] =
     getParticipantElements(participants);
 
-  matchedElements.forEach(applyStyles);
+  matchedElements.forEach(applyMatchedElementStyle);
 
   await channel.broadcast<ParticipantsChangeMessage>(
     BroadcastChannel.PARTICIPANTS_CHANGE,

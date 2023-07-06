@@ -201,7 +201,7 @@ export class BackgroundCommunicationChannel {
           type: MessageType.FETCH_PARTICIPANTS_RESPONSE,
           success: false,
           message: `Couldn't fetch participants`,
-          payload: null,
+          payload: [],
         };
 
         try {

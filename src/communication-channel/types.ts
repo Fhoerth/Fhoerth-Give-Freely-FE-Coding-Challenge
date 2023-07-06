@@ -56,16 +56,9 @@ export type FetchParticipantsRequest = {
   type: MessageType.FETCH_PARTICIPANTS_REQUEST;
 };
 
-export type FetchParticipantsResponse =
-  | {
-      type: MessageType.FETCH_PARTICIPANTS_RESPONSE;
-      success: true;
-      message: 'OK';
-      payload: Participant[];
-    }
-  | {
-      type: MessageType.FETCH_PARTICIPANTS_RESPONSE;
-      success: false;
-      message: string;
-      payload: null;
-    };
+export type FetchParticipantsResponse = {
+  type: MessageType.FETCH_PARTICIPANTS_RESPONSE;
+  success: boolean;
+  message: string;
+  payload: Participant[];
+};
