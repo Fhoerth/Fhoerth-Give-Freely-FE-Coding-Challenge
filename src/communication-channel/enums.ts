@@ -1,6 +1,7 @@
 export enum ChannelName {
   GOOGLE = 'GOOGLE',
   BANNER = 'BANNER',
+  POPUP = 'POPUP',
 }
 
 export enum Client {
@@ -9,6 +10,7 @@ export enum Client {
   MODAL,
   BANNER,
   BACKGROUND,
+  POPUP,
 }
 
 export enum MessageType {
