@@ -1,6 +1,17 @@
 # Usage
 
-- 1. `Create an .env file at the root of the project.`
-- 2. `Create PARTICIPANTS_API_URL and PARTICIPANTS_API_X_ACCESS_KEY`
-- 3. `Fill both keys with the values provided in the original README.md`
-     -- 3.1 `Take into consideration to use double quotes for values, and don't forget to escape "$" characters with "\$"`
+1. Make sure your current branc is `fhoerth__give-freely-coding-challenge`
+2. Use .env.example to create an .env file at the root of the project.
+3. Modify PARTICIPANTS_API_URL and PARTICIPANTS_API_X_ACCESS_KEY values with the ones provided in the original READE.md file
+
+## Development
+
+```bash
+npm run dev
+```
+
+## Production
+
+```bash
+npm run build
+```
