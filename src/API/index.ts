@@ -2,7 +2,6 @@ import { assert } from '~utils/assert';
 
 import type { ParticipantsResponse } from './types';
 
-console.log(process.env.PLASMO_PUBLIC_PARTICIPANTS_API_URL);
 export class API {
   static BASE_URL = process.env.PLASMO_PUBLIC_PARTICIPANTS_API_URL;
   static X_ACCESS_KEY = process.env.PLASMO_PUBLIC_PARTICIPANTS_API_X_ACCESS_KEY;
