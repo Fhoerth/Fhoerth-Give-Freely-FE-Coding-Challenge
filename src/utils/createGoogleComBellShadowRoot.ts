@@ -11,9 +11,9 @@ function findFormContainer(): HTMLFormElement {
 export function createGoogleComBellShadowRoot(
   styles: string[],
 ): HTMLDivElement {
-  const root = document.createElement('giveFreely-participant-banner');
+  const root = document.createElement('giveFreely-notifications');
   const shadowRoot = root.attachShadow({
-    mode: 'closed',
+    mode: 'open',
   });
 
   const form = findFormContainer();

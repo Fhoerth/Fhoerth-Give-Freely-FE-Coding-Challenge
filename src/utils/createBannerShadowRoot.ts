@@ -1,7 +1,7 @@
 export function createBannerShadowRoot(styles: string[]): HTMLDivElement {
   const root = document.createElement('giveFreely-participant-banner');
   const shadowRoot = root.attachShadow({
-    mode: 'closed',
+    mode: 'open',
   });
 
   const html = document.createElement('div');
