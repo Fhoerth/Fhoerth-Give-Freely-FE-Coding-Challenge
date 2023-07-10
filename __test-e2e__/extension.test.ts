@@ -9,7 +9,7 @@ const options = {
   height: 1080,
 };
 
-async function testExtensionInSite(site: string): Promise<void> {
+async function testExtensionOn(site: string): Promise<void> {
   const browser = await puppeteer.launch({
     headless: false,
     pipe: true,
@@ -60,14 +60,14 @@ jest.setTimeout(40000);
 
 describe('extension', () => {
   it('works on uber site', async () => {
-    await testExtensionInSite('https://uber.com');
+    await testExtensionOn('https://uber.com');
   });
 
   it('works on expedia site', async () => {
-    await testExtensionInSite('https://expedia.com');
+    await testExtensionOn('https://expedia.com');
   });
 
   it('works on trip advisor site', async () => {
-    await testExtensionInSite('https://tripadvisor.com');
+    await testExtensionOn('https://tripadvisor.com');
   });
 });
