@@ -1,6 +1,6 @@
-export function getRandomElement<T>(messages: T[]): T {
-  const messagesLength = messages.length;
-  const randomIndex = Math.floor(Math.random() * messagesLength);
+export function getRandomElement<T>(elements: T[]): T {
+  const elementsLength = elements.length;
+  const randomIndex = Math.floor(Math.random() * elementsLength);
 
-  return messages[randomIndex];
+  return elements[randomIndex];
 }
