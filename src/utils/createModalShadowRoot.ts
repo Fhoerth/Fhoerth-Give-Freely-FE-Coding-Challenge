@@ -3,7 +3,7 @@ const maxZIndexForContent = Math.pow(2, 31) - 2;
 export function createModalShadowRoot(styles: string[]): HTMLDivElement {
   const root = document.createElement('giveFreely-participants-modal');
   const shadowRoot = root.attachShadow({
-    mode: 'closed',
+    mode: 'open',
   });
 
   const html = document.createElement('div');

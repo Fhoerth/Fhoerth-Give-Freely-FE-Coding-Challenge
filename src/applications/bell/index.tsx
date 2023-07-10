@@ -43,8 +43,11 @@ export const Bell: React.FC = () => {
 
   return (
     <div className="flex">
-      <div className="giveFreely__image" />
-      <div className="giveFreely__bell-icon" onClick={handleIconClick}>
+      <div className="giveFreely__image" data-testid="giveFreely__image" />
+      <div
+        className="giveFreely__bell-icon"
+        onClick={handleIconClick}
+        data-testid="giveFreely__bell-icon">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
