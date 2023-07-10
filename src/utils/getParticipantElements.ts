@@ -83,18 +83,18 @@ export function getParticipantElements(
     [] as string[],
   );
   const anchorElementMatchesSet = new Set(anchorElementMatches);
-  const participantsResult: Participant[] = [];
+  const participantsInvolved: Participant[] = [];
 
   for (const match of anchorElementMatchesSet) {
     const maybeParticipant = participantsMap.get(match);
 
     if (maybeParticipant) {
-      participantsResult.push(maybeParticipant);
+      participantsInvolved.push(maybeParticipant);
     }
   }
 
   const closestElementsResult =
     participantAnchorElements.map(findClosestElement);
 
-  return [participantsResult, closestElementsResult];
+  return [participantsInvolved, closestElementsResult];
 }
