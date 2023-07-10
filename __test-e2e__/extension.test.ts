@@ -4,13 +4,15 @@ import puppeteer from 'puppeteer';
 
 const pathToExtension = path.join(process.cwd(), 'build', 'chrome-mv3-prod');
 
+const options = {
+  width: 1920,
+  height: 1080,
+};
+
 async function testExtensionInSite(site: string): Promise<void> {
-  const options = {
-    width: 1920,
-    height: 1080,
-  };
   const browser = await puppeteer.launch({
     headless: false,
+    pipe: true,
     args: [
       `--disable-extensions-except=${pathToExtension}`,
       `--load-extension=${pathToExtension}`,
@@ -22,6 +24,7 @@ async function testExtensionInSite(site: string): Promise<void> {
 
   await page.goto('https://www.google.com');
   await browser.waitForTarget((target) => target.type() === 'service_worker');
+
   await page.$eval(
     'textarea',
     (element, value) => {
@@ -32,9 +35,24 @@ async function testExtensionInSite(site: string): Promise<void> {
   await page.$eval('center > input', (element) => {
     element.click();
   });
-  await page.waitForNetworkIdle();
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  await page.$eval('giveFreely-notifications', () => true);
+  await page.waitForNavigation();
+
+  await page.$eval('giveFreely-notifications', (element) => {
+    const { shadowRoot } = element;
+
+    if (shadowRoot) {
+      const bell = shadowRoot.querySelector(
+        "div[data-testid='giveFreely__bell-icon']",
+      );
+
+      if (bell) {
+        (bell as HTMLElement).click();
+      }
+    }
+
+    return null;
+  });
+  await page.$eval('giveFreely-participants-modal', () => true);
   await browser.close();
 }
 
