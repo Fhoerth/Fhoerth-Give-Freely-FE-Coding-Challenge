@@ -17,7 +17,7 @@ describe('getRandomElement', () => {
   });
 
   describe('when Math.random() returns a number strictly between 0 and 1', () => {
-    it('should return intermediate element', () => {
+    it('should return an intermediate element', () => {
       jest.spyOn(global.Math, 'random').mockReturnValue(0.5);
 
       const elements = [1, 2, 3, 4, 5];
