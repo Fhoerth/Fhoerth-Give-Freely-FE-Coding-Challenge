@@ -1,3 +1,9 @@
+# Installation
+
+```bash
+pnpm i
+```
+
 # Usage
 
 1. Make sure your current branch is `fhoerth__give-freely-coding-challenge`
@@ -14,6 +20,12 @@ npm run dev
 
 ```bash
 npm run build
+```
+
+## Testing (e2e)
+
+```bash
+npm run test:e2e
 ```
 
 ## Few notes before reviewing
