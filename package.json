@@ -8,7 +8,8 @@
     "dev": "plasmo dev",
     "build": "plasmo build",
     "package": "plasmo package",
-    "test:e2e": "npm run build && NODE_OPTIONS=--experimental-vm-modules jest"
+    "test:e2e": "npm run build && NODE_OPTIONS=--experimental-vm-modules jest --runInBand ./__test-e2e__",
+    "test:unit": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand ./__test__"
   },
   "packageManager": "^pnpm@7.21.0",
   "dependencies": {
