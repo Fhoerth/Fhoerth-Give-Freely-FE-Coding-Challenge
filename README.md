@@ -22,10 +22,16 @@ npm run dev
 npm run build
 ```
 
-## Testing (e2e)
+## Running tests (e2e)
 
 ```bash
 npm run test:e2e
+```
+
+## Running tests (unit)
+
+```bash
+npm run test:unit
 ```
 
 ## Few notes before reviewing
