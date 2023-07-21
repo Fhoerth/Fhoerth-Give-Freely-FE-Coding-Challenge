@@ -1,6 +1,6 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
-import { renderModal } from '~applications/global-modal/renderModal';
+import { renderModal } from '~applications/trip-advisor-modal/renderModal';
 import { ContentCommunicationChannel } from '~communication-channel/channels/ContentCommunicationChannel';
 import { ChannelId, Client, MessageType } from '~communication-channel/enums';
 import type { OpenExternalLinkRequest } from '~communication-channel/types';
