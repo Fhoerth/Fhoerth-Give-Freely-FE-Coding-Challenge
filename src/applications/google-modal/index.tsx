@@ -79,7 +79,7 @@ export const GoogleModal: React.FC<ModalProps> = ({ opened = false }) => {
         opened: true,
         loading: false,
         title: participantName,
-        content: 'World',
+        content: message,
       } as const)
     : ({ ...baseProps, opened: false, loading: true } as const);
 
