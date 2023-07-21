@@ -11,13 +11,12 @@ export const config: PlasmoCSConfig = {
 
 async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel({
-    channelId: ChannelId.GOOGLE,
+    channelId: ChannelId.BELL,
     client: Client.BELL,
     clients: [Client.BELL, Client.SEARCH, Client.GOOGLE_MODAL],
   });
 
   await channel.initialize();
-
   renderBell(channel);
 }
 

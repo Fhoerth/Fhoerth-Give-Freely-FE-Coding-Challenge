@@ -15,8 +15,6 @@ export class API {
         'X-Access-Key': API.X_ACCESS_KEY,
       },
     }).then((response) => {
-      console.log(response);
-
       if (response.ok) {
         return response.json();
       }

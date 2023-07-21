@@ -5,7 +5,7 @@ import { createRoot } from 'react-dom/client';
 import type { ContentCommunicationChannel } from '~communication-channel/channels/ContentCommunicationChannel';
 import { createModalShadowRoot } from '~utils/createModalShadowRoot';
 
-import { Modal } from '.';
+import { GoogleModal } from '.';
 import { CommunicationChannelContextProvider } from '../common/Context';
 
 export function renderModal(channel: ContentCommunicationChannel): void {
@@ -13,7 +13,7 @@ export function renderModal(channel: ContentCommunicationChannel): void {
 
   root.render(
     <CommunicationChannelContextProvider channel={channel}>
-      <Modal />
+      <GoogleModal />
     </CommunicationChannelContextProvider>,
   );
 }

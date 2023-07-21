@@ -92,7 +92,7 @@ export class ContentCommunicationChannel extends CommunicationChannel {
       broadcastMessage;
 
     if (
-      channelId === this.#channelId &&
+      channelId !== this.#channelId &&
       recipient === this.#client &&
       sender !== this.#client
     ) {

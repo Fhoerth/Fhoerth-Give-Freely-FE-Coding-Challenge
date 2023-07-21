@@ -33,7 +33,7 @@ function maybeGetFirstParticipant(
 async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel({
     channelId: ChannelId.BANNER,
-    client: Client.BELL,
+    client: Client.BANNER,
     clients: [],
   });
 

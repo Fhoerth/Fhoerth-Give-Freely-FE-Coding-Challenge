@@ -62,3 +62,5 @@ export type FetchParticipantsResponse = {
   message: string;
   payload: Participant[];
 };
+
+export type OpenExternalLinkRequest = any;

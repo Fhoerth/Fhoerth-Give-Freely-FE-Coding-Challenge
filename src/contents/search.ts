@@ -22,7 +22,7 @@ const applyMatchedElementStyle = (element: Element): void => {
 
 async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel({
-    channelId: ChannelId.GOOGLE,
+    channelId: ChannelId.SEARCH,
     client: Client.SEARCH,
     clients: [Client.BELL, Client.SEARCH, Client.GOOGLE_MODAL],
   });

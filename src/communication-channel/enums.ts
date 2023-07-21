@@ -1,6 +1,7 @@
 export enum ChannelId {
-  GOOGLE = 'GOOGLE',
+  SEARCH = 'SEARCH',
   BANNER = 'BANNER',
+  BELL = 'BELL',
   GOOGLE_MODAL = 'GOOGLE_MODAL',
   GLOBAL_MODAL = 'GLOBAL_MODAL',
   POPUP = 'POPUP',
@@ -25,6 +26,7 @@ export enum MessageType {
   FETCH_PARTICIPANTS_RESPONSE,
   BROADCAST_MESSAGE,
   OPEN_MODAL_MESSAGE,
+  OPEN_EXTERNAL_LINK
 }
 
 export enum BroadcastChannel {

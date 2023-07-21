@@ -1,6 +1,6 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
-import { renderModal } from '~applications/modal/renderModal';
+import { renderModal } from '~applications/google-modal/renderModal';
 import { ContentCommunicationChannel } from '~communication-channel/channels/ContentCommunicationChannel';
 import { ChannelId, Client } from '~communication-channel/enums';
 import { onDomContentLoaded } from '~utils/onDomContentLoaded';
@@ -15,7 +15,6 @@ async function domContentLoaded(): Promise<void> {
     client: Client.GOOGLE_MODAL,
     clients: [Client.BELL, Client.SEARCH, Client.GOOGLE_MODAL],
   });
-
   await channel.initialize();
 
   renderModal(channel);

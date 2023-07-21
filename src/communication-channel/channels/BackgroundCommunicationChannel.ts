@@ -96,8 +96,8 @@ export class BackgroundCommunicationChannel {
     }
 
     const broadcastRequest: BroadcastRequest = request;
-    const id = clients.getId(sender);
     const tabClients = clients.getClients(broadcastRequest.channelId);
+    const id = clients.getId(sender);
 
     if (!tabClients) {
       const message = `Couldn't find clients for tab id ${id}`;

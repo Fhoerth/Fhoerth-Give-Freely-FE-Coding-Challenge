@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties, Dispatch, RefObject, SetStateAction } from 'react';
 
+/**
+ *   boolean,
+ *  Dispatch<SetStateAction<boolean>>,
+ */
+
 export function useModal(
   opened: boolean,
-): [
-  RefObject<HTMLDivElement>,
-  boolean,
-  Dispatch<SetStateAction<boolean>>,
-  CSSProperties,
-] {
+): [RefObject<HTMLDivElement>, CSSProperties] {
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const [showModal, setShowModal] = useState<boolean>(opened);
   const [modalStyle, setModalStyle] = useState<CSSProperties>({
     top: '-5000px',
     left: '-5000px',
@@ -31,10 +30,10 @@ export function useModal(
   );
 
   useEffect(() => {
-    if (modalRef.current && showModal) {
+    if (modalRef.current && opened) {
       calculatePosition(modalRef.current);
     }
-  }, [setShowModal, showModal, modalRef.current]);
+  }, [opened, modalRef.current]);
 
-  return [modalRef, showModal, setShowModal, modalStyle];
+  return [modalRef, modalStyle];
 }
