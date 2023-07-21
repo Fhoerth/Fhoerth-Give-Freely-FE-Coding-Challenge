@@ -36,7 +36,7 @@ export const GlobalModal: React.FC<ModalProps> = ({ opened = false }) => {
         type: MessageType.OPEN_EXTERNAL_LINK,
         payload: {
           url,
-          requestHeaders: [{ name: 'X-Access-Key', value: accessKey }],
+          requestHeaders: [{ key: 'X-Access-Key', value: accessKey }],
         },
       },
     );

@@ -2,6 +2,11 @@ import type { Participant } from '~API/types';
 
 import { BroadcastChannel, ChannelId, Client, MessageType } from './enums';
 
+export interface HttpHeader {
+  key: string;
+  value: string;
+}
+
 export type AddListener = Parameters<
   typeof chrome.runtime.onMessage.addListener
 >[0];
@@ -62,12 +67,6 @@ export type FetchParticipantsResponse = {
   message: string;
   payload: Participant[];
 };
-
-interface HttpHeader {
-  name: string;
-  value?: string | undefined;
-  binaryValue?: ArrayBuffer | undefined;
-}
 
 export type OpenExternalLinkRequest = {
   type: MessageType.OPEN_EXTERNAL_LINK;

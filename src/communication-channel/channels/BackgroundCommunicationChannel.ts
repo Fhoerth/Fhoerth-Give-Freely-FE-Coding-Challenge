@@ -14,8 +14,11 @@ import type {
   PingRequest,
   PingResponse,
 } from '../types';
+import { createDeclarativeNetRequestInterceptor } from './createDeclarativeNetRequestInterceptor';
 
 export class BackgroundCommunicationChannel {
+  #requestInterceptorId = 0;
+
   initialize(): void {
     this.#attachListeners();
   }
@@ -230,38 +233,38 @@ export class BackgroundCommunicationChannel {
     const id = clients.getId(sender);
     const openExternalLinkRequest = request as OpenExternalLinkRequest;
 
-    if (openExternalLinkRequest.payload.requestHeaders) {
-      browser.webRequest.onBeforeSendHeaders.addListener(
-        function listener(requestDetails) {
-          browser.webRequest.onBeforeSendHeaders.removeListener(listener);
-          if (requestDetails.type === 'main_frame') {
-            return {
-              requestHeaders: openExternalLinkRequest.payload.requestHeaders,
-            };
-          }
+    this.#requestInterceptorId += 1;
 
-          return;
-        },
-        { urls: [openExternalLinkRequest.payload.url.concat('*')] },
-      );
-    }
+    const requestInterceptorId = this.#requestInterceptorId;
+    const { url, requestHeaders } = openExternalLinkRequest.payload;
+    const rule = createDeclarativeNetRequestInterceptor(
+      requestInterceptorId,
+      url,
+      requestHeaders,
+    );
 
-    void browser.tabs
-      .create({
-        url: openExternalLinkRequest.payload.url,
+    void chrome.declarativeNetRequest
+      .updateDynamicRules({
+        addRules: [rule],
       })
-      .then((tab) => {
-        try {
-          const response: OpenExternalLinkResponse = {
-            type: MessageType.OPEN_EXTERNAL_LINK,
-            success: true,
-            message: 'OK',
-          };
+      .then(() => {
+        return browser.tabs.create({
+          url: openExternalLinkRequest.payload.url,
+        });
+      })
+      .then(() => {
+        return chrome.declarativeNetRequest.updateDynamicRules({
+          removeRuleIds: [requestInterceptorId],
+        });
+      })
+      .then(() => {
+        const response: OpenExternalLinkResponse = {
+          type: MessageType.OPEN_EXTERNAL_LINK,
+          success: true,
+          message: 'OK',
+        };
 
-          sendResponse(response);
-        } catch {
-          console.error(`Couldn't send response to tab id ${id}`);
-        }
+        sendResponse(response);
       })
       .catch(() => {
         const errorMessage = `Couldn't send response to tab id ${id}, or open new tab`;
@@ -271,6 +274,8 @@ export class BackgroundCommunicationChannel {
             success: true,
             message: errorMessage,
           };
+
+          sendResponse(response);
         } catch {
           console.error(errorMessage);
         }
