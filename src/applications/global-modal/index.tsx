@@ -17,13 +17,17 @@ export const GlobalModal: React.FC<ModalProps> = ({ opened = false }) => {
     setShowModal(true);
   }, []);
 
-  return (
-    <Modal
-      opened={true}
-      loading={false}
-      title="Trip Advisor"
-      content={<a href="#">Open link in a new tab</a>}
-      onModalClose={handleModalClose}
-    />
-  );
+  const baseProps = { onModalClose: handleModalClose };
+  const isModalOpened = showModal;
+  const props = isModalOpened
+    ? ({
+        ...baseProps,
+        opened: true,
+        loading: false,
+        title: 'Trip Advisor',
+        content: <a href="#">Open link in a new tab</a>,
+      } as const)
+    : ({ ...baseProps, opened: false, loading: true } as const);
+
+  return <Modal {...props} />;
 };
