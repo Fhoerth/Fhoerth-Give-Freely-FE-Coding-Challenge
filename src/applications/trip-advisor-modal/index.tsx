@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { MessageType } from '~communication-channel/enums';
 import type {
   OpenExternalLinkRequest,
   OpenExternalLinkResponse,
 } from '~communication-channel/types';
+import { assert } from '~utils/assert';
 
 import { useCommunicationChannel } from '../common/Context';
 import { Modal } from '../common/components/Modal';
@@ -14,6 +15,11 @@ interface ModalProps {
 }
 
 export const GlobalModal: React.FC<ModalProps> = ({ opened = false }) => {
+  const url = useMemo<string>(() => {
+    assert(process.env.PLASMO_PUBLIC_PARTICIPANTS_API_URL);
+    return process.env.PLASMO_PUBLIC_PARTICIPANTS_API_URL;
+  }, [process.env]);
+
   const channel = useCommunicationChannel();
   const [showModal, setShowModal] = useState<boolean>(opened);
 
@@ -22,7 +28,7 @@ export const GlobalModal: React.FC<ModalProps> = ({ opened = false }) => {
       {
         type: MessageType.OPEN_EXTERNAL_LINK,
         payload: {
-          url: 'https://www.google.com',
+          url,
         },
       },
     );

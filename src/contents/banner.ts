@@ -1,5 +1,6 @@
 import type { PlasmoCSConfig } from 'plasmo';
 
+import { API } from '~API';
 import type { Participant } from '~API/types';
 import { renderBanner } from '~applications/banner/renderBanner';
 import { ContentCommunicationChannel } from '~communication-channel/channels/ContentCommunicationChannel';
@@ -34,14 +35,14 @@ async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel({
     channelId: ChannelId.BANNER,
     client: Client.BANNER,
-    clients: [],
+    clients: [Client.BANNER],
   });
 
   await channel.initialize();
 
   const { payload: participants } = await channel.fetchParticipants();
-  const maybeFirstParticipant = maybeGetFirstParticipant(participants);
 
+  const maybeFirstParticipant = maybeGetFirstParticipant(participants);
   if (maybeFirstParticipant) {
     const participant = maybeFirstParticipant;
     renderBanner(participant);

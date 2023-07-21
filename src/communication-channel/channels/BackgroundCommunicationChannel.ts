@@ -230,32 +230,37 @@ export class BackgroundCommunicationChannel {
     const id = clients.getId(sender);
     const openExternalLinkRequest = request as OpenExternalLinkRequest;
 
-    try {
-      chrome.tabs.create({
+    void chrome.tabs
+      .create({
         url: openExternalLinkRequest.payload.url,
+      })
+      .then(() => {
+        try {
+          const response: OpenExternalLinkResponse = {
+            type: MessageType.OPEN_EXTERNAL_LINK,
+            success: true,
+            message: 'OK',
+          };
+
+          sendResponse(response);
+        } catch {
+          console.error(`Couldn't send response to tab id ${id}`);
+        }
+      })
+      .catch(() => {
+        const errorMessage = `Couldn't send response to tab id ${id}, or open new tab`;
+        try {
+          const response: OpenExternalLinkResponse = {
+            type: MessageType.OPEN_EXTERNAL_LINK,
+            success: true,
+            message: errorMessage,
+          };
+        } catch {
+          console.error(errorMessage);
+        }
       });
 
-      const response: OpenExternalLinkResponse = {
-        type: MessageType.OPEN_EXTERNAL_LINK,
-        success: true,
-        message: 'OK',
-      };
-
-      sendResponse(response);
-    } catch {
-      const errorMessage = `Couldn't send response to tab id ${id}, or open new tab`;
-      try {
-        const response: OpenExternalLinkResponse = {
-          type: MessageType.OPEN_EXTERNAL_LINK,
-          success: true,
-          message: errorMessage,
-        };
-      } catch {
-        console.error(errorMessage);
-      }
-
-      return true;
-    }
+    return true;
   };
 
   #attachListeners(): void {
