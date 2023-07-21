@@ -6,7 +6,7 @@ import { ChannelId, Client, MessageType } from '~communication-channel/enums';
 import { onDomContentLoaded } from '~utils/onDomContentLoaded';
 
 export const config: PlasmoCSConfig = {
-  matches: ['https://tripadvisor.com'],
+  matches: ['https://*.tripadvisor.com/*'],
 };
 
 async function domContentLoaded(): Promise<void> {
