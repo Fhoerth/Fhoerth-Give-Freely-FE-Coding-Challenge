@@ -63,10 +63,17 @@ export type FetchParticipantsResponse = {
   payload: Participant[];
 };
 
+interface HttpHeader {
+  name: string;
+  value?: string | undefined;
+  binaryValue?: ArrayBuffer | undefined;
+}
+
 export type OpenExternalLinkRequest = {
   type: MessageType.OPEN_EXTERNAL_LINK;
   payload: {
     url: string;
+    requestHeaders?: HttpHeader[];
   };
 };
 

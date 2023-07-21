@@ -230,11 +230,27 @@ export class BackgroundCommunicationChannel {
     const id = clients.getId(sender);
     const openExternalLinkRequest = request as OpenExternalLinkRequest;
 
-    void chrome.tabs
+    if (openExternalLinkRequest.payload.requestHeaders) {
+      browser.webRequest.onBeforeSendHeaders.addListener(
+        function listener(requestDetails) {
+          browser.webRequest.onBeforeSendHeaders.removeListener(listener);
+          if (requestDetails.type === 'main_frame') {
+            return {
+              requestHeaders: openExternalLinkRequest.payload.requestHeaders,
+            };
+          }
+
+          return;
+        },
+        { urls: [openExternalLinkRequest.payload.url.concat('*')] },
+      );
+    }
+
+    void browser.tabs
       .create({
         url: openExternalLinkRequest.payload.url,
       })
-      .then(() => {
+      .then((tab) => {
         try {
           const response: OpenExternalLinkResponse = {
             type: MessageType.OPEN_EXTERNAL_LINK,

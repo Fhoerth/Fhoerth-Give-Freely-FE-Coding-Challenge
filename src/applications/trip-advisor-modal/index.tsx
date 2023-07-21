@@ -17,7 +17,14 @@ interface ModalProps {
 export const GlobalModal: React.FC<ModalProps> = ({ opened = false }) => {
   const url = useMemo<string>(() => {
     assert(process.env.PLASMO_PUBLIC_PARTICIPANTS_API_URL);
+
     return process.env.PLASMO_PUBLIC_PARTICIPANTS_API_URL;
+  }, [process.env]);
+
+  const accessKey = useMemo<string>(() => {
+    assert(process.env.PLASMO_PUBLIC_PARTICIPANTS_API_X_ACCESS_KEY);
+
+    return process.env.PLASMO_PUBLIC_PARTICIPANTS_API_X_ACCESS_KEY;
   }, [process.env]);
 
   const channel = useCommunicationChannel();
@@ -29,6 +36,7 @@ export const GlobalModal: React.FC<ModalProps> = ({ opened = false }) => {
         type: MessageType.OPEN_EXTERNAL_LINK,
         payload: {
           url,
+          requestHeaders: [{ name: 'X-Access-Key', value: accessKey }],
         },
       },
     );
