@@ -9,6 +9,7 @@ import type {
   BroadcastRequest,
   BroadcastResponse,
   FetchParticipantsResponse,
+  OpenExternalLinkResponse,
   PingRequest,
   PingResponse,
 } from '../types';
@@ -216,9 +217,38 @@ export class BackgroundCommunicationChannel {
     return true;
   };
 
+  #openExternalLinkListener: AddListener = (
+    request,
+    sender,
+    sendResponse,
+  ): void | boolean => {
+    if (request?.type !== MessageType.OPEN_EXTERNAL_LINK) {
+      return;
+    }
+
+    const id = clients.getId(sender);
+
+    console.log(request);
+
+    const response: OpenExternalLinkResponse = {
+      type: MessageType.OPEN_EXTERNAL_LINK,
+      success: true,
+      message: 'OK',
+    };
+
+    try {
+      sendResponse(response);
+    } catch {
+      console.error(`Couldn't send response to tab id ${id}`);
+
+      return true;
+    }
+  };
+
   #attachListeners(): void {
     browser.runtime.onMessage.addListener(this.#handshakeListener);
     browser.runtime.onMessage.addListener(this.#broadcastListener);
     browser.runtime.onMessage.addListener(this.#requestListener);
+    browser.runtime.onMessage.addListener(this.#openExternalLinkListener);
   }
 }
