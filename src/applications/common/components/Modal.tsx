@@ -20,7 +20,11 @@ export const Modal: React.FC<ModalProps> = (props) => {
   const { opened, loading, onModalClose } = props;
   const [modalRef, modalStyle] = useModal(opened);
 
-  if (!opened && loading) {
+  if (!opened) {
+    return null;
+  }
+
+  if (loading) {
     return (
       <div
         ref={modalRef}
