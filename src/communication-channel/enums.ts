@@ -1,13 +1,16 @@
 export enum ChannelId {
   GOOGLE = 'GOOGLE',
   BANNER = 'BANNER',
+  GOOGLE_MODAL = 'GOOGLE_MODAL',
+  GLOBAL_MODAL = 'GLOBAL_MODAL',
   POPUP = 'POPUP',
 }
 
 export enum Client {
   BELL,
   SEARCH,
-  MODAL,
+  GOOGLE_MODAL,
+  GLOBAL_MODAL,
   BANNER,
   BACKGROUND,
   POPUP,

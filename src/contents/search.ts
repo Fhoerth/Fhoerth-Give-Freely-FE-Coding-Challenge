@@ -24,7 +24,7 @@ async function domContentLoaded(): Promise<void> {
   const channel = new ContentCommunicationChannel({
     channelId: ChannelId.GOOGLE,
     client: Client.SEARCH,
-    clients: [Client.BELL, Client.SEARCH, Client.MODAL],
+    clients: [Client.BELL, Client.SEARCH, Client.GOOGLE_MODAL],
   });
 
   await channel.initialize();
